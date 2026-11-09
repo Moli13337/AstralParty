@@ -1,0 +1,16 @@
+{
+  "server_ip": "127.0.0.1",
+  "server_port": 8800,
+  "log_ip": "127.0.0.1:9999",
+  "notice_ip": "127.0.0.1",
+  "cdn_url": "http://127.0.0.1:8810",
+  "steam_id": "76561198000000001",
+  "language": "english",
+  "gm": true,
+  "recharge_test": true,
+  "write_hacker_config": true,
+  "hook_login": true,
+  "console": true,
+  "hook_debug_log": true,
+  "log_level": 2
+}

@@ -1,0 +1,27 @@
+# build artifacts
+*.exe
+*.dll
+*.obj
+*.obj
+*.exp
+*.lib
+*.zip
+*.log
+
+# go
+server/server
+server/server_new.exe
+server/data/
+
+# .net
+**/bin/
+**/obj/
+
+# patch outputs
+patch/out/
+
+# local junk
+*.bak
+*.bak_*
+ap_patch.log
+__pycache__/

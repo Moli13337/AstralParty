@@ -1,0 +1,4161 @@
+syntax = "proto3";
+package protocol;
+import "model/model.proto";
+import "errcode/code.proto";
+
+enum AuthType {
+  Dev = 0;
+  Steam = 1;
+  TapTap = 2;
+  Abroad = 3;
+  China = 4;
+}
+
+enum FinishAchieveType {
+  None = 0;
+  KillCount = 1;
+  TotalDamage = 2;
+  PkDamageMax = 3;
+  TotalDie = 4;
+  TotalInjured = 5;
+  TotalTrap = 6;
+}
+
+message DevInfo {
+  string nick = 2;
+}
+
+message SteamInfo {
+  string ticket = 1;
+  string identity = 2;
+  fixed64 id = 3;
+  string nick = 4;
+  string mac = 5;
+}
+
+message AbroadInfo {
+  int32 source = 1;
+  string sid = 2;
+  string deviceId = 3;
+}
+
+message ChinaInfo {
+  string gameId = 1;
+  string channelId = 2;
+  string appId = 3;
+  string sid = 4;
+  string extra = 5;
+  string deviceId = 6;
+}
+
+message TaptapInfo {
+  string kid = 1;
+  string access_token = 2;
+  string mac_key = 3;
+  string nick = 4;
+  string email = 5;
+}
+
+message ConnectC2S {
+  string publicKey = 1;
+  AuthType auth = 2;
+  string clientVer = 3;
+  oneof authInfo {
+    DevInfo dev = 4;
+    SteamInfo steam = 5;
+    TaptapInfo taptap = 6;
+    AbroadInfo abroad = 7;
+    ChinaInfo china = 8;
+  }
+}
+
+message ConnectS2C {
+  string cipherKey = 1;
+  sfixed64 sessionId = 2;
+  model.AccountInfo account = 3;
+  model.Player player = 4;
+  sfixed32 queueTime = 5;
+  string data = 6;
+  sfixed64 banTime = 7;
+  sfixed64 nowTime = 8;
+}
+
+message HeartbeatC2S {
+  sfixed64 client = 1;
+}
+
+message HeartbeatS2C {
+  sfixed64 client = 1;
+  sfixed64 server = 2;
+}
+
+message CreateMatchTeamC2S {
+  model.MatchMode mode = 1;
+  sfixed32 map_id = 2;
+  sfixed32 difficulty = 3;
+}
+
+message CreateMatchTeamS2C {
+  model.MatchTeamInfo team = 1;
+}
+
+message ChangeMatchTeamC2S {
+  model.MatchMode mode = 1;
+  sfixed32 map_id = 2;
+  sfixed32 difficulty = 3;
+  sfixed64 team_id = 100;
+}
+
+message ChangeMatchTeamS2C {
+  model.MatchTeamInfo team = 1;
+}
+
+message JoinMatchTeamC2S {
+  sfixed64 team_id = 1;
+}
+
+message JoinMatchTeamS2C {
+  model.MatchTeamInfo team = 1;
+}
+
+message ExitMatchTeamC2S {
+  sfixed64 player_id = 1;
+  sfixed64 team_id = 2;
+}
+
+message ExitMatchTeamS2C {
+  sfixed64 exit_player_id = 1;
+}
+
+message RefreshMatchTeamInfoC2S {
+  sfixed64 team_id = 1;
+}
+
+message RefreshMatchTeamInfoS2C {
+  model.MatchTeamInfo team = 1;
+}
+
+message RefreshMatchTeamStateNotify {
+  sfixed64 team_id = 1;
+  model.MatchTeamInfo.State state = 2;
+  sfixed32 estimatedWaitTime = 3;
+}
+
+message MatchTeamInviteC2S {
+  repeated sfixed64 player_ids = 1;
+}
+
+message MatchTeamInviteS2C {
+}
+
+message MatchTeamInviteNotify {
+  sfixed64 player_id = 1;
+  sfixed64 team_id = 2;
+  string name = 3;
+  sfixed32 headIcon = 4;
+  sfixed32 lv = 5;
+  sfixed32 background = 6;
+}
+
+message MatchTeamReadyC2S {
+  sfixed64 player_id = 1;
+  sfixed64 team_id = 2;
+  bool isReady = 3;
+}
+
+message MatchTeamReadyS2C {
+  sfixed64 player_id = 1;
+  sfixed64 team_id = 2;
+  bool isReady = 3;
+}
+
+message StartMatchC2S {
+  sfixed64 team_id = 1;
+}
+
+message StartMatchS2C {
+}
+
+message GetMatchEstimatedWaitTimeC2S {
+  sfixed32 mapId = 1;
+  sfixed32 mode = 2;
+  sfixed32 difficulty = 3;
+}
+
+message GetMatchEstimatedWaitTimeS2C {
+  sfixed32 estimatedWaitTime = 1;
+}
+
+message GetHeroRoundEffectC2S {
+}
+
+message GetHeroRoundEffectS2C {
+  sfixed32 cardNum = 1;
+  sfixed32 gold = 2;
+}
+
+message CancelMatchC2S {
+  sfixed64 team_id = 1;
+}
+
+message CancelMatchS2C {
+}
+
+message CreateRoomC2S {
+  sfixed64 id = 1;
+  string name = 2;
+  string pwd = 3;
+  sfixed32 map_id = 4;
+  sfixed32 max_time = 5;
+  sfixed32 upgrade_plan = 6;
+  sfixed32 time_plan = 7;
+  sfixed32 mode = 8;
+  fixed64 lobbyId = 9;
+  sfixed32 speedType = 10;
+  sfixed32 difficulty = 11;
+  bool skipStory = 12;
+  sfixed32 roomLabel = 13;
+}
+
+message CreateRoomS2C {
+  model.Room room = 1;
+}
+
+message SingleCampaignC2S {
+  sfixed64 id = 1;
+  sfixed32 level_id = 2;
+  bool skipStory = 12;
+}
+
+message SingleCampaignS2C {
+  model.Room room = 1;
+}
+
+message MatchSuccessC2S {
+  sfixed64 id = 1;
+  model.MatchMode mode = 2;
+  sfixed32 map_id = 3;
+  sfixed32 difficulty = 4;
+  repeated model.Player players = 5;
+  repeated sfixed64 team_ids = 6;
+}
+
+message MatchSuccessS2C {
+  code.Code code = 1;
+  model.Room room = 2;
+}
+
+message ChangeRoomC2S {
+  string pwd = 1;
+  sfixed32 map_id = 2;
+  sfixed32 max_time = 3;
+  sfixed32 upgrade_plan = 4;
+  sfixed32 time_plan = 5;
+  sfixed32 mode = 6;
+  sfixed32 speedType = 7;
+  sfixed32 difficulty = 8;
+  bool skipStory = 9;
+  sfixed32 roomLabel = 10;
+}
+
+message ChangeRoomS2C {
+  model.Room room = 1;
+}
+
+message SteamSearchRoomC2S {
+  fixed64 steamLobbyId = 1;
+}
+
+message SteamSearchRoomS2C {
+  fixed64 steamLobbyId = 1;
+  sfixed64 roomId = 2;
+  sfixed32 playerCount = 3;
+  string pwd = 4;
+  sfixed32 state = 5;
+  sfixed32 roomServerId = 6;
+  sfixed32 mapType = 7;
+}
+
+message JoinRoomC2S {
+  sfixed64 room_id = 1;
+  sfixed32 slot = 2;
+  string pwd = 3;
+  sfixed32 room_server_id = 1001;
+}
+
+message JoinRoomS2C {
+  model.Room room = 2;
+}
+
+message WatchJoinRoomC2S {
+  string watchCode = 1;
+}
+
+message WatchJoinRoomS2C {
+  sfixed64 room_id = 1;
+  sfixed32 map_id = 2;
+  repeated model.Player players = 3;
+  sfixed32 watchCount = 4;
+  sfixed64 startTime = 5;
+  sfixed32 map_type = 6;
+  model.HeroBarBox box = 7;
+  sfixed32 mapIndex = 8;
+  sfixed32 difficulty = 9;
+  sfixed32 mapDifficultyId = 10;
+  sfixed32 room_server_id = 11;
+  repeated sfixed32 roomTermIds = 12;
+}
+
+message QuickJoinRoomC2S {
+  sfixed32 map_mod = 1;
+  repeated sfixed32 difficulty = 2;
+  repeated sfixed32 sportPassMapId = 3;
+}
+
+message QuickJoinRoomS2C {
+  model.Room room = 1;
+}
+
+message SearchRoomC2S {
+  sfixed64 room_id = 1;
+}
+
+message SearchRoomS2C {
+  sfixed64 room_id = 1;
+  bool isPwd = 2;
+  sfixed32 room_server_id = 3;
+}
+
+message RoomKickPlayerC2S {
+  sfixed64 player_id = 1;
+}
+
+message RoomKickPlayerS2C {
+  sfixed64 player_id = 1;
+}
+
+message RoomAbdicationC2S {
+  sfixed64 player_id = 1;
+}
+
+message RoomAbdicationS2C {
+  sfixed64 master_id = 1;
+}
+
+message RoomReadyC2S {
+  bool isReady = 1;
+}
+
+message RoomReadyS2C {
+  sfixed64 player_id = 1;
+  bool isReady = 2;
+}
+
+message RoomShortChatC2S {
+  sfixed32 index = 1;
+  repeated sfixed64 playerIds = 2;
+  sfixed64 playerId = 3;
+}
+
+message RoomShortChatS2C {
+  sfixed64 player_id = 1;
+  sfixed32 index = 2;
+}
+
+message MatchTeamChatC2S {
+  sfixed32 index = 1;
+  sfixed64 team_id = 2;
+}
+
+message MatchTeamChatS2C {
+  sfixed64 player_id = 1;
+  sfixed32 index = 2;
+}
+
+message PraisePlayerC2S {
+  repeated sfixed64 player_id = 1;
+}
+
+message PraisePlayerS2C {
+  repeated sfixed64 player_id = 1;
+}
+
+message AccuseC2S {
+  sfixed64 playerId = 1;
+}
+
+message AccuseS2C {
+}
+
+message ClientDataUploadC2S {
+  enum OpsData {
+    None = 0;
+    GuideData = 1;
+    DateChangeData = 2;
+    SongData = 3;
+    SettingData = 4;
+    NewItemData = 5;
+    CampaignTutorialData = 6;
+    StarExpression = 7;
+    TopExpression = 8;
+  }
+  model.ClientData data = 1;
+  OpsData opsData = 2;
+}
+
+message ClientDataUploadS2C {
+}
+
+message FriendListC2S {
+  int32 page = 1;
+  bool onlyOnline = 2;
+}
+
+message FriendListS2C {
+  repeated FriendInfo friends = 1;
+  bool isEnd = 2;
+}
+
+message FriendInfo {
+  sfixed64 playerId = 1;
+  string name = 2;
+  sfixed64 roomId = 3;
+  sfixed32 playerCount = 4;
+  model.Room.State state = 5;
+  sfixed64 offlineTime = 6;
+  string pwd = 7;
+  sfixed32 headIcon = 8;
+  sfixed32 lv = 9;
+  sfixed32 background = 10;
+  sfixed64 loginTime = 11;
+  bool isOnline = 12;
+  sfixed32 room_server_id = 13;
+  bool isBusy = 14;
+  sfixed32 signalScore = 15;
+  string note = 16;
+  sfixed64 guildId = 17;
+}
+
+message PlayerSimpleInfoReq {
+  sfixed64 playerId = 1;
+}
+
+message PlayerSimpleInfoRsp {
+  sfixed64 playerId = 1;
+  string name = 2;
+  sfixed64 offlineTime = 3;
+  sfixed32 headIcon = 4;
+  sfixed32 lv = 5;
+  sfixed32 background = 6;
+  bool isOnline = 7;
+  bool isBusy = 8;
+  sfixed32 signalScore = 9;
+}
+
+message GetShowPlayerReq {
+  sfixed64 playerId = 1;
+}
+
+message FriendApplyC2S {
+  sfixed64 playerId = 1;
+}
+
+message FriendApplyS2C {
+  sfixed64 playerId = 1;
+}
+
+message FriendApplyListC2S {
+  int32 page = 1;
+}
+
+message FriendApplyListS2C {
+  repeated FriendShowPlayerInfo apply = 1;
+  bool isEnd = 2;
+}
+
+message FriendApplyOpC2S {
+  sfixed64 playerId = 1;
+  sfixed32 opType = 2;
+  bool allRefuse = 3;
+}
+
+message FriendApplyOpS2C {
+  sfixed64 playerId = 1;
+  sfixed32 opType = 2;
+  bool allRefuse = 3;
+}
+
+message FriendOpC2S {
+  sfixed64 playerId = 1;
+  sfixed32 opType = 2;
+}
+
+message FriendOpS2C {
+  sfixed64 playerId = 1;
+  sfixed32 opType = 2;
+}
+
+message FriendInviteC2S {
+  repeated sfixed64 playerId = 1;
+  string pwd = 2;
+}
+
+message FriendInviteS2C {
+}
+
+message FriendInviteListC2S {
+  int32 page = 1;
+}
+
+message FriendInviteListS2C {
+  repeated FriendInviteInfo inf = 1;
+  bool isEnd = 2;
+}
+
+message FriendInviteCleanC2S {
+}
+
+message FriendInviteCleanS2C {
+}
+
+message FriendInviteOpC2S {
+  sfixed64 playerId = 1;
+  sfixed64 roomId = 2;
+}
+
+message FriendInviteOpS2C {
+}
+
+message FriendInviteInfo {
+  sfixed64 playerId = 1;
+  string name = 2;
+  sfixed32 headIcon = 5;
+  sfixed32 lv = 6;
+  sfixed64 time = 7;
+  sfixed32 background = 8;
+  bool valid = 9;
+  sfixed64 roomId = 10;
+  string roomName = 11;
+  string pwd = 12;
+  sfixed32 mapId = 13;
+  sfixed32 playerCount = 14;
+  sfixed32 room_server_id = 15;
+}
+
+message FriendBlacksListC2S {
+  int32 page = 1;
+}
+
+message FriendBlacksListS2C {
+  repeated FriendShowPlayerInfo infos = 1;
+  bool isEnd = 2;
+}
+
+message GetChatMsgC2S {
+  sfixed64 targetId = 1;
+}
+
+message GetChatMsgS2C {
+  sfixed64 targetId = 1;
+  repeated model.ChatMessage message = 2;
+  sfixed64 lastTime = 3;
+}
+
+message ReadChatMsgC2S {
+  sfixed64 targetId = 1;
+}
+
+message ReadChatMsgS2C {
+}
+
+message DelChatMsgInfoC2S {
+  sfixed64 targetId = 1;
+}
+
+message DelChatMsgInfoS2C {
+}
+
+message FriendSendMsgC2S {
+  sfixed64 playerId = 1;
+  string msg = 2;
+}
+
+message FriendSendMsgS2C {
+  sfixed64 time = 1;
+}
+
+message SetFriendNoteC2S {
+  sfixed64 playerId = 1;
+  string note = 2;
+}
+
+message SetFriendNoteS2C {
+  sfixed64 playerId = 1;
+  string note = 2;
+}
+
+message SetOnlineStatusC2S {
+  sfixed32 onlineStatus = 1;
+}
+
+message SetOnlineStatusS2C {
+  sfixed32 onlineStatus = 1;
+}
+
+message NearFightPlayerC2S {
+  int32 page = 1;
+  bool onlyOnline = 2;
+}
+
+message NearFightPlayerS2C {
+  repeated FriendShowPlayerInfo infos = 1;
+  bool isEnd = 2;
+}
+
+message SearchPlayerC2S {
+  sfixed64 playerId = 1;
+}
+
+message SearchPlayerS2C {
+  FriendShowPlayerInfo info = 1;
+}
+
+message FriendShowPlayerInfo {
+  sfixed64 playerId = 1;
+  string name = 2;
+  sfixed32 headIcon = 3;
+  sfixed32 lv = 4;
+  sfixed32 background = 5;
+  sfixed64 time = 6;
+  sfixed64 offlineTime = 7;
+  bool isOnline = 8;
+  bool isBusy = 9;
+  sfixed64 guildId = 10;
+}
+
+message ShowPlayer {
+  sfixed64 player_id = 1;
+  sfixed32 standingPainting = 5;
+  repeated sfixed32 achieveId = 6;
+  bool isShowData = 7;
+  bool isShowFight = 8;
+  repeated ShowPlayerShortFight record = 9;
+  ShowPlayerStatistics statistics = 10;
+  sfixed32 praiseNum = 11;
+  repeated ShowPlayerShortFight replayRecord = 12;
+}
+
+message ShowPlayerShortFight {
+  sfixed64 time = 1;
+  sfixed32 rank = 2;
+  sfixed32 heroId = 3;
+  sfixed32 index = 4;
+  sfixed32 mapType = 5;
+  string replayId = 6;
+  string version = 7;
+}
+
+message ShowPlayerStatistics {
+  sfixed32 fightCount = 1;
+  sfixed32 winFightCount = 2;
+  sfixed32 roleCardCount = 3;
+  sfixed32 useHero = 4;
+  sfixed32 adornCount = 5;
+  sfixed32 skinCount = 6;
+}
+
+message SetShowPlayerC2S {
+  ShowPlayer showData = 1;
+}
+
+message SetShowPlayerS2C {
+}
+
+message GetShowPlayerC2S {
+  sfixed64 player_id = 1;
+}
+
+message GetShowPlayerS2C {
+  ShowPlayer showData = 1;
+}
+
+message GetPlayerSimpleC2S {
+  sfixed64 player_id = 1;
+}
+
+message GetPlayerSimpleS2C {
+  FriendInfo PlayerInfo = 1;
+}
+
+message GetPlayerFightRecordC2S {
+  sfixed64 player_id = 1;
+  sfixed32 index = 2;
+  bool isReplay = 3;
+}
+
+message GetPlayerFightRecordS2C {
+  repeated model.PlayerFightData recordData = 1;
+}
+
+message GetDay7RewardC2S {
+  sfixed32 goodsId = 1;
+}
+
+message GetDay7RewardS2C {
+  model.Day7Reward day7 = 1;
+}
+
+message ChargeCreateC2S {
+  sfixed32 goodsId = 1;
+  sfixed32 count = 2;
+  fixed64 steamid = 3;
+  fixed32 appid = 4;
+  string language = 5;
+  string description = 6;
+  sfixed32 type = 7;
+  sfixed32 coupons = 8;
+}
+
+message ChargeCreateS2C {
+}
+
+message ChargeC2S {
+  fixed64 orderID = 1;
+}
+
+message ChargeS2C {
+  message FirstBuyEntry {
+    sfixed32 key = 1;
+    model.RechargeBuyFirst value = 2;
+  }
+  repeated FirstBuyEntry firstBuy = 1;
+  sfixed32 MonthlyCardRemDays = 2;
+  sfixed32 type = 3;
+  sfixed32 goodsId = 4;
+  sfixed32 itemId = 5;
+}
+
+message DevChargeC2S {
+  sfixed32 goodsId = 1;
+  sfixed32 count = 2;
+  sfixed32 type = 3;
+}
+
+message DevChargeS2C {
+  message FirstBuyEntry {
+    sfixed32 key = 1;
+    model.RechargeBuyFirst value = 2;
+  }
+  repeated FirstBuyEntry firstBuy = 1;
+  sfixed32 MonthlyCardRemDays = 2;
+  sfixed32 type = 3;
+  sfixed32 goodsId = 4;
+  sfixed32 itemId = 5;
+}
+
+message GiftCdkC2S {
+  string cdk = 1;
+}
+
+message GiftCdkS2C {
+}
+
+message MailReadC2S {
+  sfixed32 id = 1;
+}
+
+message MailReadS2C {
+}
+
+message MailStarC2S {
+  sfixed32 id = 1;
+  bool isStarMail = 2;
+}
+
+message MailStarS2C {
+  sfixed32 id = 1;
+  bool isStarMail = 2;
+}
+
+message MailGetRewardC2S {
+  sfixed32 id = 1;
+}
+
+message MailGetRewardS2C {
+  repeated sfixed32 ids = 1;
+}
+
+message MailDelReadC2S {
+  sfixed32 id = 1;
+}
+
+message MailDelReadS2C {
+  repeated sfixed32 ids = 1;
+}
+
+message GachaRecordC2S {
+  sfixed32 id = 1;
+}
+
+message GachaRecordS2C {
+  repeated model.GachaRecord records = 1;
+}
+
+message MailAddS2C {
+  model.MailData mail = 1;
+}
+
+message MailDelS2C {
+  repeated sfixed32 ids = 1;
+}
+
+message FriendListChangeS2C {
+  model.FriendList friend = 1;
+}
+
+message OnlineSyncRoomIdS2C {
+  sfixed64 roomId = 1;
+}
+
+message NoticeS2C {
+  string notice = 1;
+}
+
+message LoopNoticeS2C {
+  string context = 1;
+  sfixed32 interval = 2;
+  sfixed64 start_time = 3;
+  sfixed64 end_time = 4;
+}
+
+message FriendInviteNotifyS2C {
+}
+
+message FriendNotifyS2C {
+  sfixed64 playerId = 1;
+}
+
+message FriendDelNotifyS2C {
+  sfixed64 playerId = 1;
+}
+
+message BattlePassLvS2C {
+  sfixed32 lv = 1;
+  sfixed32 exp = 2;
+}
+
+message BattlePassTaskInfoS2C {
+  message TaskEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  repeated TaskEntry task = 1;
+  repeated sfixed32 taskRewardIs = 2;
+}
+
+message BattlePassUpdateTaskS2C {
+  message TaskEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  repeated TaskEntry task = 1;
+}
+
+message BattlePassBuyS2C {
+  sfixed32 gear = 1;
+}
+
+message BattlePassInfoS2C {
+  model.BattlePass Inf = 1;
+}
+
+message FriendsChatMsgS2C {
+  sfixed64 playerId = 1;
+  sfixed64 lastTime = 2;
+  string message = 3;
+}
+
+message ExitRoomC2S {
+  enum ForceExitType {
+    none = 0;
+    timeOut = 1;
+    quickClick = 2;
+    voluntaryExit = 3;
+  }
+  bool isOffline = 1;
+  bool isWaitOffline = 2;
+  ForceExitType exitType = 3;
+}
+
+message ExitRoomS2C {
+  sfixed64 room_id = 1;
+  sfixed64 master_id = 2;
+  sfixed64 player_id = 3;
+  bool dissolve = 4;
+  bool game_finish = 5;
+}
+
+message PlayerOnlineRoomC2S {
+}
+
+message SysPlayerOnlineRoomC2S {
+}
+
+message SysPlayerCleanC2S {
+  bool isWatch = 1;
+}
+
+message SysPlayerPunishmentTimeC2S {
+  sfixed64 punishmentTime = 1;
+}
+
+message SysMatchSuccess {
+  sfixed64 room_id = 1;
+  sfixed32 room_server_id = 2;
+}
+
+message SysChangeMatchTeamState {
+  repeated sfixed64 team_ids = 1;
+  model.MatchTeamInfo.State state = 2;
+}
+
+message SyncRoomC2S {
+  sfixed64 room_id = 1;
+}
+
+message SyncRoomS2C {
+  model.Room room = 1;
+}
+
+message ChangeExpS2C {
+  sfixed32 level = 1;
+  sfixed32 exp = 2;
+}
+
+message ChangePraiseNumS2C {
+  sfixed32 PraiseNum = 1;
+}
+
+message ChangeItemLimitS2C {
+  message WeeklyLimitsEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  repeated WeeklyLimitsEntry Weekly_limits = 1;
+}
+
+message CleanItemLimitS2C {
+  bool weekly_clean = 1;
+}
+
+message RefreshRoomStateC2S {
+  sfixed32 progress = 1;
+}
+
+message RefreshRoomStateS2C {
+  sfixed64 room_id = 1;
+  sfixed64 player_id = 2;
+  sfixed32 progress = 3;
+  model.Room.State state = 4;
+  repeated sfixed64 player_ids = 5;
+}
+
+message WatchRefreshRoomStateC2S {
+  sfixed64 room_id = 1;
+  sfixed32 room_server_id = 1001;
+}
+
+message WatchRefreshRoomStateS2C {
+  sfixed64 room_id = 1;
+  model.Room room = 2;
+}
+
+message WatchExitRoomC2S {
+}
+
+message WatchExitRoomS2C {
+}
+
+message QueryRoomC2S {
+  sfixed32 map_mod = 1;
+}
+
+message QueryRoomS2C {
+  repeated RoomShortInfo items = 1;
+}
+
+message RoomShortInfo {
+  sfixed64 id = 1;
+  string name = 2;
+  sfixed32 map_id = 3;
+  sfixed64 master_id = 4;
+  sfixed64 create_time = 5;
+  sfixed32 headIcon = 6;
+  bool isPwd = 7;
+  sfixed32 playerCount = 8;
+  fixed64 steamLobbyId = 10;
+  sfixed32 upgrade_plan = 11;
+  sfixed32 time_plan = 12;
+  sfixed64 waitTime = 13;
+  sfixed32 speedType = 14;
+  sfixed32 mapType = 15;
+  sfixed32 master_back_board = 16;
+  sfixed32 difficulty = 17;
+  sfixed32 roomLabel = 18;
+  sfixed32 roomServerId = 19;
+}
+
+message StartGameC2S {
+  bool isAddBot = 1;
+}
+
+message StartGameS2C {
+  model.Room room = 1;
+}
+
+message ChoiceHeroC2S2 {
+  message SportGameDataEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  sfixed32 hero_id = 1;
+  bool hasHero = 2;
+  sfixed32 useAdorn = 3;
+  sfixed32 pveLevel = 4;
+  sfixed32 skinPendant = 5;
+  sfixed32 pveTalentId = 6;
+  repeated SportGameDataEntry sportGameData = 7;
+}
+
+message ChoiceHeroS2C2 {
+}
+
+message AffirmHeroC2S {
+  message DefaultHeroInfosEntry {
+    sfixed32 key = 1;
+    model.DefaultHeroInfo value = 2;
+  }
+  message CampaignHeroInfoMapEntry {
+    sfixed32 key = 1;
+    model.CampaignHeroInfoMap value = 2;
+  }
+  bool auto = 1;
+  repeated DefaultHeroInfosEntry defaultHeroInfos = 2;
+  repeated CampaignHeroInfoMapEntry campaignHeroInfoMap = 3;
+}
+
+message AffirmHeroS2C {
+  sfixed32 hero_id = 1;
+  bool hasChoice = 2;
+  sfixed64 player_id = 3;
+  sfixed32 useAdorn = 4;
+}
+
+message ChooseSkinC2S {
+  sfixed32 hero_id = 1;
+  sfixed32 useAdorn = 2;
+  bool Affirmed = 3;
+  sfixed32 skin_pendant = 4;
+}
+
+message ChooseSkinS2C {
+  sfixed64 player_id = 1;
+  sfixed32 useAdorn = 2;
+  bool Affirmed = 3;
+  sfixed32 hero_id = 4;
+}
+
+message PlayerShopBuyC2S {
+  sfixed32 type = 1;
+  sfixed32 goods_id = 2;
+  sfixed32 buy_count = 3;
+  sfixed32 chain_id = 4;
+  sfixed32 discount_card_id = 5;
+}
+
+message PlayerShopBuyS2C {
+  sfixed32 type = 1;
+  sfixed32 goods_id = 2;
+  sfixed32 buy_count = 3;
+  sfixed32 chain_id = 4;
+  sfixed32 discount_card_id = 5;
+}
+
+message PlayerUseItemC2S {
+  sfixed32 itemId = 1;
+  sfixed32 itemCount = 2;
+}
+
+message PlayerUseItemS2C {
+  sfixed32 itemId = 1;
+  sfixed32 itemCount = 2;
+}
+
+message CheatItemC2S {
+  bool isAll = 1;
+  sfixed32 itemId = 2;
+  sfixed32 itemCount = 3;
+  bool isGacha = 4;
+  sfixed32 exp = 5;
+  bool isUnlockSportInfo = 6;
+  bool isUnlockRoleInfo = 7;
+  sfixed32 playerCreditScore = 8;
+  sfixed32 playerCreditAction = 9;
+}
+
+message CheatItemS2C {
+}
+
+message GmUnlockRoleInfoS2C {
+  message RoleInfoEntry {
+    sfixed32 key = 1;
+    model.RoleCard value = 2;
+  }
+  repeated RoleInfoEntry roleInfo = 1;
+}
+
+message GMPlayerSettingC2S {
+  bool RoomActionLimitAllOpen = 1;
+}
+
+message GMPlayerSettingS2C {
+}
+
+message UseTreasureC2S {
+  sfixed32 defId = 1;
+  sfixed32 count = 2;
+  sfixed32 selectItemId = 3;
+}
+
+message UseTreasureS2C {
+  repeated model.ItemEtc items = 1;
+}
+
+message UseTreasureAutoTransformC2S {
+  sfixed32 defId = 1;
+  sfixed32 count = 2;
+  sfixed32 selectItemId = 3;
+}
+
+message ItemTransformPair {
+  model.ItemEtc replaced = 1;
+  repeated model.ItemEtc gains = 2;
+}
+
+message UseTreasureAutoTransformS2C {
+  repeated model.ItemEtc items = 1;
+  repeated model.ItemEtc transformItems = 2;
+  repeated ItemTransformPair transforms = 3;
+}
+
+message SetFashionC2S {
+  message FashionEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  sfixed32 plan = 1;
+  repeated FashionEntry fashion = 2;
+}
+
+message SetFashionS2C {
+}
+
+message SetCardAltArtC2S {
+  sfixed32 cardId = 1;
+  sfixed32 cardFaceId = 2;
+}
+
+message SetCardAltArtS2C {
+  sfixed32 cardId = 1;
+  sfixed32 cardFaceId = 2;
+}
+
+message SelectFashionPlanC2S {
+  sfixed32 plan = 1;
+}
+
+message SelectFashionPlanS2C {
+}
+
+message GachaC2S {
+  sfixed32 defId = 1;
+  sfixed32 count = 2;
+}
+
+message GachaS2C {
+  repeated GachaReward reward = 1;
+  sfixed32 count = 2;
+  sfixed32 poolId = 3;
+}
+
+message GachaCountRewardC2S {
+  sfixed32 poolId = 1;
+}
+
+message GachaCountRewardS2C {
+  sfixed32 rewardCount = 1;
+  sfixed32 poolId = 2;
+}
+
+message RookieGachaRewardC2S {
+  sfixed32 poolId = 1;
+  sfixed32 defId = 2;
+  sfixed32 itemId = 3;
+}
+
+message RookieGachaRewardS2C {
+  sfixed32 poolId = 1;
+  sfixed32 defId = 2;
+  sfixed32 rewardCount = 3;
+}
+
+message LiveGiftPackageC2S {
+  message ItemsEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  repeated ItemsEntry Items = 1;
+}
+
+message LiveGiftPackageS2C {
+}
+
+message GachaCountS2C {
+  repeated GachaCount count = 1;
+}
+
+message GachaCount {
+  sfixed32 count = 1;
+  sfixed32 poolId = 2;
+  sfixed32 rewardCount = 3;
+}
+
+message GachaReward {
+  sfixed32 itemId = 1;
+  sfixed32 count = 2;
+}
+
+message GmC2S {
+  sfixed32 hp = 1;
+  sfixed32 gold = 2;
+  sfixed32 event_id = 3;
+  sfixed32 destiny_id = 4;
+  sfixed32 divination_id = 5;
+  repeated sfixed32 add_card_ids = 6;
+  repeated sfixed32 remove_card_ids = 7;
+  bool isOver = 8;
+  sfixed32 relic_id = 9;
+  sfixed32 game_progress = 10;
+  sfixed32 skillId = 11;
+  sfixed32 monsterId = 12;
+  sfixed64 targetId = 13;
+  sfixed32 targetNodeId = 14;
+  sfixed32 movePoint = 15;
+  sfixed32 healthVal = 16;
+  sfixed32 attackVal = 17;
+  sfixed32 defenseVal = 18;
+  sfixed32 starLv = 19;
+  sfixed32 goldCount = 20;
+  sfixed32 diceAttackPoint = 21;
+  sfixed32 diceDefensePoint = 22;
+  sfixed32 createMonsterNodeId = 23;
+  sfixed32 reRollNum = 24;
+  sfixed32 buffId = 25;
+  sfixed32 sourceSkillId = 26;
+  sfixed32 sourceCardId = 27;
+  sfixed32 useCardNum = 28;
+  repeated sfixed32 termIds = 29;
+  sfixed32 mapDifficultyId = 30;
+  sfixed32 gameRound = 31;
+  repeated sfixed32 all_card_ids = 32;
+}
+
+message GmS2C {
+  bool no_dev_env = 1;
+  bool no_curr_hero = 2;
+}
+
+message RoleCardUpLvC2S {
+  sfixed32 defId = 1;
+  sfixed32 itemDefId = 2;
+  sfixed32 itemCount = 3;
+}
+
+message RoleCardUpLvS2C {
+  sfixed32 defId = 1;
+  sfixed32 lv = 2;
+  sfixed32 exp = 3;
+}
+
+message BattlePassGetRewardC2S {
+}
+
+message BattlePassGetRewardS2C {
+}
+
+message BattlePassTaskRewardC2S {
+  sfixed32 defId = 1;
+}
+
+message BattlePassTaskRewardS2C {
+}
+
+message BattlePassUpLvC2S {
+  sfixed32 count = 1;
+}
+
+message BattlePassUpLvS2C {
+}
+
+message RoleCardBreakThroughC2S {
+  sfixed32 defId = 1;
+  bool isSuper = 2;
+}
+
+message RoleCardBreakThroughS2C {
+}
+
+message RoleCardCollectC2S {
+  sfixed32 defId = 1;
+  bool Collected = 2;
+}
+
+message RoleCardCollectS2C {
+  sfixed32 defId = 1;
+}
+
+message RoleCardChoiceResC2S {
+  sfixed32 defId = 1;
+  sfixed32 itemId = 2;
+}
+
+message RoleCardChoiceResS2C {
+}
+
+message TaskRewardC2S {
+  sfixed32 defId = 1;
+  sfixed32 type = 2;
+}
+
+message TaskRewardS2C {
+  sfixed32 progressReward = 1;
+}
+
+message ActivityMissionRewardC2S {
+  sfixed32 taskId = 1;
+}
+
+message ActivityMissionRewardS2C {
+  sfixed32 taskId = 1;
+}
+
+message ActivityTaskRewardC2S {
+  sfixed32 infoId = 1;
+  sfixed32 taskId = 2;
+}
+
+message ActivityTaskRewardS2C {
+}
+
+message TeachingC2S {
+}
+
+message TeachingS2C {
+}
+
+message ClientCheckTaskC2S {
+  sfixed32 param = 1;
+}
+
+message ClientCheckTaskS2C {
+  sfixed32 param = 1;
+}
+
+message ClientClickConfirmTaskC2S {
+  sfixed32 missionId = 1;
+}
+
+message ClientClickConfirmTaskS2C {
+  sfixed32 missionId = 1;
+}
+
+message ChoiceHeroC2S {
+  sfixed32 hero_id = 1;
+}
+
+message ChoiceHeroS2C {
+  model.Room room = 1;
+}
+
+message ThrowDiceC2S {
+  model.ActionInfo info = 1;
+  sfixed32 dev_point = 2;
+  bool is_no_oper = 3;
+  bool isMoveNow = 4;
+}
+
+message ThrowDiceS2C {
+  repeated sfixed32 vals = 1;
+  sfixed32 move_point = 2;
+  sfixed64 player_id = 3;
+  bool force_dir = 4;
+  bool isControlMovePoint = 5;
+}
+
+message BossSleepS2C {
+  sfixed64 player_id = 1;
+}
+
+message MoveC2S {
+  model.ActionInfo info = 1;
+  sfixed32 direction = 2;
+  bool force_dir = 3;
+  bool land_effect = 4;
+  repeated sfixed32 path = 5;
+}
+
+message MoveS2C {
+  sfixed64 player_id = 1;
+  repeated sfixed32 node_ids = 2;
+  bool end = 3;
+}
+
+message RefMallS2C {
+  model.PlayerShopInfo shop_info = 1;
+}
+
+message StopOrContinueC2S {
+  model.ActionInfo info = 1;
+  bool stop = 2;
+}
+
+message StopOrContinueS2C {
+  sfixed64 player_id = 1;
+  bool stop = 2;
+}
+
+message RemoteShopC2S {
+  model.ActionInfo info = 1;
+  repeated sfixed32 cards = 2;
+  sfixed32 gold = 3;
+  sfixed32 buyIdx = 4;
+  sfixed32 saleCardId = 5;
+}
+
+message RemoteShopS2C {
+  sfixed64 player_id = 1;
+  sfixed32 buyIdx = 3;
+  sfixed32 saleCardId = 4;
+}
+
+message ShopBuyC2S {
+  model.ActionInfo info = 1;
+  repeated sfixed32 cards = 2;
+  sfixed32 free_card = 3;
+  sfixed32 gold = 4;
+  repeated sfixed32 buy_cards = 5;
+  sfixed32 freeCardNum = 6;
+  bool is_remote = 7;
+  repeated bool alreadys = 8;
+}
+
+message ShopBuyS2C {
+  sfixed64 player_id = 1;
+  repeated sfixed32 buy_cards = 3;
+  repeated sfixed32 cards = 4;
+  repeated bool alreadys = 5;
+}
+
+message PVEShopBuyC2S {
+  model.ActionInfo info = 1;
+  repeated sfixed32 cards = 2;
+  sfixed32 free_card = 3;
+  sfixed32 gold = 4;
+  sfixed32 assist_gold = 5;
+  repeated sfixed32 buy_cards = 6;
+  sfixed64 assist_player = 7;
+  sfixed32 freeCardNum = 8;
+  bool is_remote = 9;
+  repeated bool alreadys = 10;
+  bool is_close = 11;
+  bool is_bot = 12;
+  repeated bool talent_skill_free_card = 13;
+  sfixed32 disCountGold = 14;
+}
+
+message PVEShopBuyS2C {
+  sfixed64 player_id = 1;
+  repeated sfixed32 buy_cards = 2;
+  sfixed64 assist_player = 3;
+  repeated sfixed32 cards = 4;
+  repeated bool alreadys = 5;
+  bool is_close = 6;
+}
+
+message SelectRelicC2S {
+  model.ActionInfo info = 1;
+  repeated sfixed32 relics = 2;
+  sfixed32 idx = 3;
+  bool is_reroll = 4;
+  sfixed32 lv = 5;
+  sfixed32 supLv = 6;
+}
+
+message SelectRelicS2C {
+  sfixed64 player_id = 1;
+  sfixed32 relicId = 2;
+  bool is_reroll = 3;
+}
+
+message SyncRelicsS2C {
+  message SelectRelicsEntry {
+    sfixed32 key = 1;
+    bool value = 2;
+  }
+  sfixed64 playerId = 1;
+  repeated SelectRelicsEntry selectRelics = 52;
+}
+
+message VoteSelectC2S {
+  sfixed32 selectId = 1;
+}
+
+message VoteSelectS2C {
+  sfixed64 playerId = 1;
+  sfixed32 selectId = 2;
+}
+
+message VoteC2S {
+  model.ActionInfo info = 1;
+  repeated sfixed32 voteIds = 2;
+}
+
+message VoteS2C {
+  sfixed64 playerId = 1;
+  sfixed32 selectId = 2;
+}
+
+message MapCampScoreS2C {
+  message CampScoreEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  repeated CampScoreEntry CampScore = 1;
+}
+
+message PkAfterVoteS2C {
+  message DicePointEntry {
+    sfixed64 key = 1;
+    sfixed32 value = 2;
+  }
+  repeated DicePointEntry dicePoint = 1;
+  sfixed32 campId = 2;
+}
+
+message MonsterNotUseSkillS2C {
+  bool notUseSkill = 1;
+  sfixed64 playerId = 2;
+}
+
+message NotifyStoryC2S {
+  model.ActionInfo info = 1;
+  sfixed32 index = 2;
+}
+
+message NotifyStoryS2C {
+  sfixed64 player_id = 1;
+  sfixed32 index = 2;
+}
+
+message PursuitC2S {
+  model.ActionInfo info = 1;
+  sfixed64 select_player_id = 2;
+}
+
+message PursuitS2C {
+  sfixed64 player_id = 1;
+  sfixed32 node_id = 2;
+  repeated sfixed32 front_ids = 3;
+  sfixed32 back_id = 4;
+  bool exit = 5;
+}
+
+message MonsterPursuitC2S {
+  model.ActionInfo info = 1;
+  sfixed64 select_id = 2;
+}
+
+message MonsterPursuitS2C {
+  sfixed64 player_id = 1;
+  sfixed32 node_id = 2;
+  repeated sfixed32 front_ids = 3;
+  sfixed32 back_id = 4;
+  bool exit = 5;
+}
+
+message BuyRelicC2S {
+  model.ActionInfo info = 1;
+  sfixed32 divinationGold = 2;
+  sfixed32 relicGold = 3;
+  sfixed32 select = 4;
+  bool exit = 5;
+}
+
+message BuyRelicS2C {
+  sfixed64 player_id = 1;
+  sfixed32 select = 2;
+  bool exit = 3;
+}
+
+message SelectMechanismC2S {
+  model.ActionInfo info = 1;
+  bool select = 2;
+}
+
+message SelectMechanismS2C {
+  sfixed64 player_id = 1;
+  bool select = 2;
+}
+
+message ClientHarmonyC2S {
+  bool isHarmony = 1;
+  sfixed32 harmonyType = 2;
+}
+
+message ClientHarmonyS2C {
+  bool isHarmony = 1;
+}
+
+message BattleUseCardC2S {
+  model.ActionInfo info = 1;
+  sfixed32 card_uid = 2;
+}
+
+message BattleUseCardS2C {
+  sfixed64 player_id = 1;
+  sfixed32 card_id = 2;
+  bool no_card = 3;
+}
+
+message BattleThrowDiceC2S {
+  model.ActionInfo info = 1;
+  sfixed32 dev_point = 2;
+}
+
+message BattleThrowDiceS2C {
+  sfixed64 player_id = 1;
+  sfixed32 val = 2;
+}
+
+message BattleChoiceC2S {
+  model.ActionInfo info = 1;
+  sfixed32 dev_point = 2;
+  bool dodge = 3;
+  bool no_dodge = 4;
+}
+
+message BattleChoiceS2C {
+  sfixed64 player_id = 1;
+  sfixed32 val = 2;
+  bool dodge = 3;
+  bool existFightBack = 4;
+}
+
+message LotteryChoiceC2S {
+  model.ActionInfo info = 1;
+  sfixed32 num = 2;
+  repeated sfixed32 vals = 3;
+}
+
+message LotteryChoiceS2C {
+  sfixed64 player_id = 1;
+  repeated sfixed32 vals = 2;
+}
+
+message MoveAgainC2S {
+  model.ActionInfo info = 1;
+  sfixed32 dev_point = 2;
+}
+
+message MoveAgainS2C {
+  sfixed64 player_id = 1;
+  sfixed32 move_point = 2;
+}
+
+message AskBattleC2S {
+  model.ActionInfo info = 1;
+  sfixed64 ask_player_id = 2;
+  bool is_battle = 3;
+  bool IsPursuit = 4;
+  bool fightBack = 5;
+  sfixed64 skill_player_id = 6;
+}
+
+message AskBattleS2C {
+  sfixed64 player_id = 1;
+  sfixed64 ask_player_id = 2;
+  bool is_battle = 3;
+}
+
+message AskReviveTeammateC2S {
+  model.ActionInfo info = 1;
+  sfixed64 ask_player_id = 2;
+  bool is_revive = 3;
+  sfixed32 gold = 4;
+}
+
+message AskReviveTeammateS2C {
+  sfixed64 player_id = 1;
+  sfixed64 ask_player_id = 2;
+  bool is_revive = 3;
+}
+
+message GetSignInRewardC2S {
+  sfixed32 activityId = 1;
+}
+
+message GetSignInRewardS2C {
+  model.SignInReward signInReward = 1;
+}
+
+message SignInRewardS2C {
+  message SignInRewardEntry {
+    sfixed32 key = 1;
+    model.SignInReward value = 2;
+  }
+  repeated SignInRewardEntry signInReward = 1;
+}
+
+message RollGoldC2S {
+  model.ActionInfo info = 1;
+  sfixed32 dev_point = 2;
+}
+
+message RollGoldS2C {
+  sfixed32 point = 1;
+}
+
+message EventThrowDiceC2S {
+  model.ActionInfo info = 1;
+  sfixed32 event_id = 2;
+  sfixed32 dev_point = 3;
+}
+
+message EventThrowDiceS2C {
+  sfixed64 player_id = 1;
+  sfixed32 point = 2;
+  sfixed32 event_id = 3;
+}
+
+message TriggerEventC2S {
+  model.ActionInfo info = 1;
+}
+
+message TriggerEventS2C {
+  sfixed64 player_id = 1;
+  sfixed32 event_id = 2;
+  repeated sfixed64 target_ids = 3;
+}
+
+message SelectEventC2S {
+  model.ActionInfo info = 1;
+  repeated sfixed32 events = 2;
+  sfixed32 idx = 3;
+}
+
+message SelectEventS2C {
+  sfixed64 playerId = 1;
+  sfixed32 eventId = 2;
+}
+
+message SelectRewardCardC2S {
+  model.ActionInfo info = 1;
+  repeated sfixed32 cardIds = 2;
+  sfixed32 idx = 3;
+}
+
+message SelectRewardCardS2C {
+  sfixed64 playerId = 1;
+  sfixed32 cardId = 2;
+}
+
+message GetReturnInfoC2S {
+}
+
+message GetReturnInfoS2C {
+  model.ReturnInfo returnInfo = 1;
+}
+
+message ReturnGiftClaimC2S {
+}
+
+message ReturnGiftClaimS2C {
+  bool freeGiftClaimed = 1;
+}
+
+message ReturnSignInClaimC2S {
+  sfixed32 actId = 1;
+  bool isAdvanced = 2;
+}
+
+message ReturnSignInClaimS2C {
+  model.ReturnSignIn signIn = 1;
+}
+
+message ReturnSurveyFinishC2S {
+}
+
+message ReturnSurveyFinishS2C {
+  sfixed32 surveyState = 1;
+}
+
+message ReturnInfoS2C {
+  model.ReturnInfo returnInfo = 1;
+}
+
+message SysPushReturnInfoC2S {
+}
+
+message SysMutePlayerC2S {
+  sfixed64 muteTime = 1;
+}
+
+message VendorBuyCardC2S {
+  model.ActionInfo info = 1;
+  sfixed32 cardId = 2;
+  sfixed32 gold = 3;
+  bool isBuy = 4;
+}
+
+message VendorBuyCardS2C {
+  sfixed64 playerId = 1;
+  bool isBuy = 2;
+}
+
+message TransferStarDiscC2S {
+  sfixed32 count = 1;
+}
+
+message TransferStarDiscS2C {
+}
+
+message GetHeroInfoC2S {
+  sfixed64 player_id = 1;
+}
+
+message GetHeroInfoS2C {
+  sfixed64 player_id = 1;
+  sfixed32 kill_count = 2;
+  sfixed32 total_die = 3;
+  sfixed32 total_damage = 4;
+  sfixed32 total_injured = 5;
+  sfixed32 treatment_score = 6;
+  sfixed32 cd = 7;
+}
+
+message UseEffectCardC2S {
+  model.ActionInfo info = 1;
+  repeated sfixed32 can_use_card_ids = 2;
+  sfixed32 card_id = 3;
+  repeated sfixed64 target_ids = 5;
+  repeated sfixed32 target_node_ids = 6;
+  sfixed32 dev_point = 7;
+  bool use_skill = 8;
+  sfixed32 skill_id = 9;
+  bool not_use_skill = 10;
+  sfixed64 counter_player = 11;
+  repeated sfixed32 card_uniqueIds = 12;
+  sfixed32 use_select_card_index = 13;
+  repeated sfixed64 landBuffUniqueIds = 14;
+  bool notMove = 15;
+  sfixed32 dicePoint = 16;
+  repeated sfixed32 target_building_guids = 17;
+}
+
+message UseEffectCardS2C {
+  message SkillCdsEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  sfixed64 player_id = 1;
+  sfixed32 card_id = 2;
+  repeated sfixed64 target_ids = 3;
+  repeated sfixed32 target_node_ids = 4;
+  bool use_skill = 8;
+  sfixed32 skill_id = 9;
+  repeated SkillCdsEntry skill_cds = 10;
+  bool enter_reverse = 11;
+}
+
+message ThrowDiceResultC2S {
+  model.ActionInfo info = 1;
+  sfixed32 max_point = 2;
+  sfixed32 point = 3;
+}
+
+message ThrowDiceResultS2C {
+  sfixed64 player_id = 1;
+  sfixed32 max_point = 2;
+  sfixed32 point = 3;
+}
+
+message BombThrowDiceC2S {
+  model.ActionInfo info = 1;
+  sfixed32 dev_point = 2;
+}
+
+message BombThrowDiceS2C {
+  sfixed64 player_id = 1;
+  sfixed32 point = 2;
+  bool is_next = 3;
+}
+
+message ChoiceDirectionC2S {
+  model.ActionInfo info = 1;
+  sfixed32 Direction = 2;
+  sfixed32 dev_point = 3;
+}
+
+message ChoiceDirectionS2C {
+}
+
+message LandChoiceTargetC2S {
+  message CanTargetIdsEntry {
+    sfixed64 key = 1;
+    bool value = 2;
+  }
+  model.ActionInfo info = 1;
+  sfixed32 land_type = 2;
+  sfixed32 target_num = 3;
+  repeated CanTargetIdsEntry can_target_ids = 4;
+  repeated sfixed64 target_ids = 5;
+  bool exit = 6;
+}
+
+message LandChoiceTargetS2C {
+  sfixed64 player_id = 1;
+  repeated sfixed64 target_ids = 2;
+  bool exit = 3;
+}
+
+message TriggerDivinationC2S {
+  model.ActionInfo info = 1;
+  repeated sfixed32 canChoiceIds = 2;
+  sfixed32 id = 3;
+}
+
+message TriggerDivinationS2C {
+  sfixed64 player_id = 1;
+  sfixed32 id = 2;
+  sfixed32 targetType = 3;
+  repeated sfixed64 targetIds = 4;
+}
+
+message TriggerDestinyC2S {
+  model.ActionInfo info = 1;
+}
+
+message TriggerDestinyS2C {
+  sfixed64 player_id = 1;
+  sfixed32 id = 2;
+}
+
+message UseQuickCardC2S {
+  model.ActionInfo info = 1;
+  sfixed64 prev_player_id = 2;
+  sfixed32 prev_card_id = 3;
+  sfixed64 prev_target_id = 6;
+  sfixed32 card_id = 4;
+  sfixed64 target_id = 5;
+}
+
+message UseQuickCardS2C {
+  sfixed64 player_id = 1;
+  sfixed32 card_id = 2;
+  sfixed32 OriginalCardId = 3;
+  sfixed64 target_id = 4;
+}
+
+message AbandonCardC2S {
+  model.ActionInfo info = 1;
+  repeated sfixed32 card_uniqueIds = 2;
+}
+
+message AbandonCardS2C {
+  sfixed64 player_id = 1;
+  repeated sfixed32 card_uniqueIds = 2;
+}
+
+message StartGambleC2S {
+  model.ActionInfo info = 1;
+  model.Gamble hall = 2;
+  bool is_exec = 3;
+  sfixed32 guess_code = 4;
+}
+
+message StartGambleS2C {
+}
+
+message GambleThrowDicC2S {
+  model.ActionInfo info = 1;
+  sfixed32 dev_point = 2;
+}
+
+message GambleThrowDicS2C {
+  sfixed64 player_id = 1;
+  sfixed32 point = 2;
+}
+
+message TriggerHospitalC2S {
+  model.ActionInfo info = 1;
+}
+
+message TriggerHospitalS2C {
+  sfixed64 player_id = 1;
+  bool in_hospital = 2;
+}
+
+message SendChatC2S {
+  sfixed32 expression_id = 1;
+  repeated sfixed64 playerIds = 2;
+  sfixed64 playerId = 3;
+}
+
+message SendChatS2C {
+  sfixed64 player_id = 1;
+  sfixed32 expression_id = 2;
+}
+
+message ChatMapMarkersC2S {
+  string msg = 1;
+  sfixed32 markId = 2;
+}
+
+message ChatMapMarkersS2C {
+  sfixed64 player_id = 1;
+  string msg = 2;
+}
+
+message PlayerChatC2S {
+  string msg = 1;
+  repeated sfixed64 playerIds = 2;
+}
+
+message PlayerChatS2C {
+  sfixed64 playerId = 1;
+  string msg = 2;
+}
+
+message SyncSingleGameDataC2S {
+  message StageLevelIdEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  model.SingleGameData singleGameInfo = 1;
+  sfixed32 levelId = 2;
+  sfixed32 score = 3;
+  sfixed32 stageId = 4;
+  repeated StageLevelIdEntry stageLevelId = 5;
+}
+
+message SyncSingleGameDataS2C {
+  sfixed32 levelId = 1;
+  sfixed32 score = 2;
+}
+
+message SingleGameScoreChangeS2C {
+  sfixed32 maxScore = 1;
+}
+
+message DelayProgressMapEventS2C {
+  message DelayProgressMapEventEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  repeated DelayProgressMapEventEntry delayProgressMapEvent = 1;
+}
+
+message SingleGameDataC2S {
+}
+
+message SingleGameDataS2C {
+  model.SingleGameData singleGameInfo = 1;
+}
+
+message LightGiftC2S {
+  sfixed32 activityId = 1;
+  sfixed32 index = 2;
+}
+
+message LightGiftS2C {
+  sfixed32 activityId = 1;
+  sfixed32 confIndex = 2;
+  sfixed32 index = 3;
+}
+
+message BuyLightGiftC2S {
+  sfixed32 activityId = 1;
+  sfixed32 index = 2;
+}
+
+message BuyLightGiftS2C {
+  model.LightGift lightGift = 1;
+}
+
+message AcquisitionC2S {
+  sfixed32 activityId = 1;
+  string inviteCode = 2;
+}
+
+message AcquisitionS2C {
+}
+
+message AcquisitionRewardC2S {
+  sfixed32 taskId = 1;
+}
+
+message AcquisitionRewardS2C {
+}
+
+message ChangePlayerSlotS2C {
+  message PlayerSlot {
+    sfixed64 player_id = 1;
+    sfixed32 Slot = 2;
+    sfixed32 changeSlot = 3;
+  }
+  repeated PlayerSlot player_slot = 1;
+}
+
+message RoomEndTime {
+  sfixed64 room_id = 1;
+}
+
+message RoomChoiceOverTime {
+  sfixed64 choiceStartTime = 1;
+}
+
+message GameTick {
+}
+
+message GameStart {
+}
+
+message GameEnd {
+}
+
+message SyncRoomInfo {
+  enum Oper {
+    NOOP = 0;
+    Insert = 1;
+    Delete = 2;
+    Update = 3;
+  }
+  sfixed64 room_id = 1;
+  Oper op = 2;
+  model.Room room = 3;
+}
+
+message KickS2C {
+}
+
+message TimeOutKickPlayerS2C {
+  bool isExit = 1;
+  sfixed64 room_id = 2;
+}
+
+message RunningGameS2C {
+  model.Room room = 1;
+}
+
+message RoomBuffS2C {
+  message BuffsEntry {
+    sfixed64 key = 1;
+    model.Buff value = 2;
+  }
+  sfixed64 room_id = 1;
+  repeated BuffsEntry buffs = 2;
+}
+
+message LotteryDrawS2C {
+  repeated sfixed64 player_ids = 1;
+  sfixed32 val = 2;
+  sfixed32 award_gold = 3;
+}
+
+message PredictActionS2C {
+  sfixed32 room_round = 1;
+  repeated model.Action actions = 2;
+}
+
+message BattleS2C {
+  model.Battle battle = 1;
+}
+
+message SkillTriggerNotifyS2C {
+  sfixed64 player_id = 1;
+  sfixed32 skill_id = 2;
+  sfixed32 buff_id = 3;
+  sfixed32 trigger = 4;
+}
+
+message LandBuffsS2C {
+  message LandBuffsWrap {
+    sfixed32 node_id = 1;
+    model.BuffArray buff_arr = 2;
+  }
+  repeated LandBuffsWrap buffs = 1;
+}
+
+message RoundStartS2C {
+  message SkillCdsEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  sfixed32 round = 1;
+  repeated SkillCdsEntry skill_cds = 2;
+  sfixed32 gold = 3;
+  sfixed32 card_num = 4;
+  sfixed64 playerId = 5;
+  sfixed32 use_card_max_num = 6;
+}
+
+message GameFinishS2C {
+  message FinishAchieve {
+    FinishAchieveType type = 1;
+    sfixed64 player_id = 2;
+    sfixed32 value = 3;
+  }
+  message AwardsEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message NewAchieveEntry {
+    sfixed64 key = 1;
+    PlayerFinishAchieve value = 2;
+  }
+  message RookieBonusAwardsEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message ReturnBonusAwardsEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message RankEntry {
+    sfixed64 key = 1;
+    sfixed32 value = 2;
+  }
+  sfixed64 room_id = 1;
+  sfixed64 winer = 2;
+  sfixed64 finish_time = 3;
+  repeated FinishAchieve achieve = 4;
+  repeated sfixed32 activityId = 5;
+  repeated AwardsEntry awards = 6;
+  repeated NewAchieveEntry newAchieve = 7;
+  Int32KvPair campScores = 8;
+  repeated RookieBonusAwardsEntry rookieBonusAwards = 9;
+  repeated ReturnBonusAwardsEntry returnBonusAwards = 10;
+  string replayId = 11;
+  string version = 12;
+  sfixed32 mapType = 13;
+  repeated RankEntry rank = 14;
+}
+
+message Int32KvPair {
+  sfixed32 key = 1;
+  sfixed32 value = 2;
+}
+
+message PlayerFinishAchieve {
+  repeated sfixed32 relics = 1;
+  sfixed32 killCount = 2;
+  sfixed32 totalDamage = 3;
+  sfixed32 totalDie = 5;
+  sfixed32 totalInjured = 6;
+  sfixed32 pvpResultGold = 7;
+  sfixed32 pvpResultLv = 8;
+  sfixed32 totalGold = 9;
+  sfixed32 pveTransferGold = 10;
+  sfixed32 winCount = 11;
+  sfixed32 pkDamageMax = 12;
+  sfixed32 treatmentScore = 13;
+  sfixed32 movePoint = 14;
+  sfixed32 battleDiceSixCount = 15;
+  bool finalKillBoss = 16;
+}
+
+message HeroBuffChangeS2C {
+  enum Oper {
+    NOOP = 0;
+    Insert = 1;
+    Delete = 2;
+    Update = 3;
+  }
+  message BuffsEntry {
+    sfixed64 key = 1;
+    model.Buff value = 2;
+  }
+  sfixed64 player_id = 1;
+  model.Buff buff = 2;
+  Oper op = 3;
+  repeated BuffsEntry buffs = 4;
+}
+
+message MonsterRefreshS2C {
+  model.Player monster = 1;
+}
+
+message MovePointBuffS2C {
+  sfixed64 player_id = 1;
+  repeated model.AdditionAttribute attrs = 2;
+}
+
+message ChangeDirS2C {
+  sfixed64 player_id = 1;
+  sfixed32 dir = 2;
+}
+
+message GambleChangeS2C {
+  model.Gamble hall = 1;
+}
+
+message HeroBarBoxChangeS2C {
+  model.HeroBarBox box = 1;
+}
+
+message RoomNotifyS2C {
+  model.Room room = 1;
+}
+
+message SayPhraseNotifyS2C {
+  model.TriggerPhrase phrase = 1;
+}
+
+message MapMissionNotifyS2C {
+  model.MapMission mission = 1;
+}
+
+message CampaignPassS2C {
+  message LevelPassEntry {
+    sfixed32 key = 1;
+    bool value = 2;
+  }
+  repeated LevelPassEntry level_pass = 1;
+}
+
+message CampaignNotifyS2C {
+  model.VictoryCondition VictoryCondition = 1;
+}
+
+message KillMessageS2C {
+  sfixed64 attacker_id = 1;
+  sfixed64 defender_id = 2;
+}
+
+message BuffTriggerNotifyS2C {
+  sfixed64 player_id = 1;
+  sfixed64 unique_id = 2;
+}
+
+message ActionStartNotifyS2C {
+  sfixed64 player_id = 1;
+  bool is_die = 2;
+  bool is_hospital = 3;
+  bool is_stop_round = 4;
+}
+
+message HeroUpLvS2C {
+  sfixed64 player_id = 1;
+  sfixed32 curr_lv = 2;
+}
+
+message HeroPlaceChangeS2C {
+  sfixed64 player_id = 1;
+  model.HeroPlace place = 2;
+}
+
+message HeroUseCardNumChangeS2C {
+  sfixed64 player_id = 1;
+  sfixed32 use_card_num = 2;
+  sfixed32 use_card_max_num = 3;
+}
+
+message CardDistanceChangeS2C {
+  sfixed64 player_id = 1;
+  sfixed32 curr_distance = 2;
+}
+
+message HeroHpChangeS2C {
+  sfixed64 player_id = 1;
+  sfixed32 change_hp = 2;
+  sfixed32 ori_hp = 3;
+  sfixed32 curr_hp = 4;
+  sfixed32 real_change_hp = 5;
+  sfixed32 real_hp = 6;
+  sfixed32 max_hp = 7;
+  sfixed32 damageType = 8;
+  sfixed64 killer = 9;
+}
+
+message HeroGoldChangeS2C {
+  sfixed64 player_id = 1;
+  sfixed32 change_gold = 2;
+  sfixed32 ori_gold = 3;
+  sfixed32 curr_gold = 4;
+}
+
+message HeroCureNumChangeS2C {
+  sfixed64 player_id = 1;
+  sfixed32 change_num = 2;
+  sfixed32 ori_num = 3;
+  sfixed32 curr_num = 4;
+}
+
+message HeroSalaryNumChangeS2C {
+  sfixed64 player_id = 1;
+  sfixed32 change_num = 2;
+  sfixed32 ori_num = 3;
+  sfixed32 curr_num = 4;
+}
+
+message HeroMarkNumChangeS2C {
+  sfixed64 player_id = 1;
+  sfixed32 change_num = 2;
+  sfixed32 ori_num = 3;
+  sfixed32 curr_num = 4;
+}
+
+message HeroEnergyNumChangeS2C {
+  sfixed64 player_id = 1;
+  sfixed32 change_num = 2;
+  sfixed32 ori_num = 3;
+  sfixed32 curr_num = 4;
+}
+
+message HeroCounterNumChangeS2C {
+  sfixed64 player_id = 1;
+  sfixed32 change_num = 2;
+  sfixed32 ori_num = 3;
+  sfixed32 curr_num = 4;
+}
+
+message HeroModifyNumChangeS2C {
+  sfixed64 player_id = 1;
+  sfixed32 change_num = 2;
+  sfixed32 ori_num = 3;
+  sfixed32 curr_num = 4;
+  bool is_actionEnd = 5;
+}
+
+message HeroUniqueNumChangeS2C {
+  sfixed64 player_id = 1;
+  sfixed32 change_num = 2;
+  sfixed32 ori_num = 3;
+  sfixed32 curr_num = 4;
+}
+
+message HeroCrimeNumChangeS2C {
+  sfixed64 player_id = 1;
+  sfixed32 change_num = 2;
+  sfixed32 ori_num = 3;
+  sfixed32 curr_num = 4;
+}
+
+message RoomHeroTriggerAddTermS2C {
+  sfixed64 player_id = 1;
+  repeated sfixed32 termIds = 2;
+}
+
+message CardAtkChangeS2C {
+  sfixed64 player_id = 1;
+  sfixed32 atk = 2;
+}
+
+message HeroNotSelectS2C {
+  sfixed64 player_id = 1;
+  bool not_select = 2;
+}
+
+message PveBossCombineS2C {
+  sfixed64 player_id = 1;
+  sfixed32 combineType = 2;
+  repeated sfixed32 bossIds = 3;
+}
+
+message LaborActDiceC2S {
+  sfixed32 diceType = 1;
+}
+
+message LaborActDiceS2C {
+  model.LaborActDiceInfo diceInfo = 1;
+}
+
+message ActionOverTimeLogC2S {
+  sfixed32 actionType = 1;
+}
+
+message ActionOverTimeLogS2C {
+}
+
+message HeroSpecialScoreChangeS2C {
+  sfixed64 player_id = 1;
+  sfixed32 change_score = 2;
+  sfixed32 ori_score = 3;
+  sfixed32 curr_score = 4;
+}
+
+message HeroBombChangeS2C {
+  sfixed64 player_id = 1;
+  repeated model.Bomb bombs = 4;
+}
+
+message HeroReRollChangeS2C {
+  sfixed64 player_id = 1;
+  sfixed32 re_roll_num = 2;
+}
+
+message HeroCdChangeS2C {
+  sfixed64 player_id = 1;
+  sfixed32 cd = 2;
+}
+
+message HeroAtkChangeS2C {
+  sfixed64 player_id = 1;
+  sfixed32 curr_atk = 5;
+}
+
+message HeroAddMoveChangeS2C {
+  sfixed64 player_id = 1;
+  sfixed32 curr_addMove = 2;
+  sfixed32 curr_decMove = 3;
+}
+
+message HeroCounterChangeS2C {
+  sfixed64 player_id = 1;
+  bool can_counter = 2;
+}
+
+message HeroDefChangeS2C {
+  sfixed64 player_id = 1;
+  sfixed32 curr_def = 5;
+}
+
+message RoomRoundAddTermS2C {
+  repeated sfixed32 termIds = 1;
+}
+
+message RoomHeroCardChangeS2C {
+  repeated model.CardInfo cards = 1;
+  sfixed64 player_id = 2;
+}
+
+message HeroCardChangeS2C {
+  sfixed64 player_id = 1;
+  repeated model.CardInfo cards = 2;
+}
+
+message HeroCardConvertS2C {
+  sfixed64 player_id = 1;
+  repeated model.CardInfo convertCards = 2;
+}
+
+message HeroDisappearS2C {
+  sfixed64 player_id = 1;
+}
+
+message HeroLotteryChangeS2C {
+  message LotterysEntry {
+    sfixed32 key = 1;
+    bool value = 2;
+  }
+  sfixed64 player_id = 1;
+  repeated LotterysEntry lotterys = 4;
+}
+
+message NoGambleNotifyS2C {
+  sfixed64 player_id = 1;
+}
+
+message GambleObServeS2C {
+  model.Gamble hall = 2;
+}
+
+message CauseOrigin {
+  enum source {
+    unknown = 0;
+    skill = 1;
+    card = 2;
+    event = 3;
+    destiny = 5;
+    divination = 6;
+    heroBuff = 7;
+    landBuff = 8;
+    land = 9;
+    bomb_die = 10;
+    round_award = 11;
+    battle = 12;
+    shop_open = 13;
+    shop_buy = 14;
+    map_event = 15;
+    round_end = 16;
+    select_relic = 17;
+    mission = 18;
+    bounty_kill = 19;
+    bounty_defend = 20;
+    pve_boss_combine = 21;
+    room_terms = 22;
+    lucky_star = 23;
+    building = 24;
+  }
+  source s = 1;
+  sfixed64 id = 3;
+}
+
+message HeroAttrEffect {
+  sfixed64 player_id = 1;
+  oneof data {
+    HeroGoldChangeS2C gold = 2;
+    HeroHpChangeS2C hp = 3;
+    HeroAtkChangeS2C atk = 4;
+    HeroDefChangeS2C def = 5;
+    HeroBuffChangeS2C buff = 6;
+    HeroPlaceChangeS2C place = 7;
+    HeroLotteryChangeS2C lottery = 8;
+    HeroCardChangeS2C card = 9;
+    HeroBombChangeS2C bomb = 10;
+    HeroUpLvS2C lv = 11;
+    HeroCdChangeS2C cd = 12;
+    HeroReRollChangeS2C reroll = 13;
+    HeroSpecialScoreChangeS2C special_score = 14;
+    HeroCureNumChangeS2C cure_num = 15;
+    HeroSalaryNumChangeS2C salary_num = 16;
+    HeroMarkNumChangeS2C mark_num = 17;
+    HeroUseCardNumChangeS2C use_card_num = 18;
+    CardDistanceChangeS2C card_distance = 19;
+    HeroCounterChangeS2C can_counter = 20;
+    HeroCounterNumChangeS2C counter_num = 21;
+    HeroModifyNumChangeS2C modify_num = 22;
+    HeroNotSelectS2C not_select = 23;
+    HeroCardConvertS2C convert_card = 24;
+    HeroDisappearS2C disappear = 25;
+    PveBossCombineS2C combine = 26;
+    HeroAddMoveChangeS2C addMove = 27;
+    HeroUniqueNumChangeS2C unique_num = 28;
+    RoomHeroTriggerAddTermS2C add_term = 29;
+    CardAtkChangeS2C card_atk = 30;
+    HeroEnergyNumChangeS2C energy_num = 31;
+    HeroCrimeNumChangeS2C crime_num = 32;
+    LandTypeChangeS2C land_type_change = 33;
+    BuildingChangeS2C building_change = 34;
+    BuildingTriggerS2C building_trigger = 35;
+  }
+}
+
+message UpdateHeroAttrS2C {
+  sfixed64 player_id = 1;
+  CauseOrigin cause = 2;
+  repeated HeroAttrEffect effect_datas = 4;
+}
+
+message HeroSkillMoveEffectS2C {
+  message EffectDataEntry {
+    sfixed32 key = 1;
+    HeroSkillMoveEffect value = 2;
+  }
+  sfixed64 playerId = 1;
+  repeated EffectDataEntry effectData = 2;
+}
+
+message HeroSkillMoveEffect {
+  repeated UpdateHeroAttrS2C effects = 1;
+}
+
+message BagItemChangeS2C {
+  repeated model.ItemEtc item = 1;
+  bool isNotShow = 2;
+}
+
+message BagExpiredTransformNotify {
+  message ExpiredItemsEntry {
+    int32 key = 1;
+    int32 value = 2;
+  }
+  message RewardItemsEntry {
+    int32 key = 1;
+    int32 value = 2;
+  }
+  repeated ExpiredItemsEntry ExpiredItems = 1;
+  repeated RewardItemsEntry RewardItems = 2;
+}
+
+message RoleCardChangeS2C {
+  model.RoleCard item = 1;
+}
+
+message TaskConditionS2C {
+  message CondEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  sfixed32 type = 1;
+  repeated CondEntry cond = 2;
+  model.ConditionData cond1 = 3;
+}
+
+message TaskInfoS2C {
+  model.TaskInfo task = 1;
+}
+
+message PlayerOnlineS2C {
+  sfixed64 playerId = 1;
+  bool isOnline = 2;
+}
+
+message ActivityTaskConditionS2C {
+  repeated ActivityTaskCondition condition = 1;
+}
+
+message MapEventS2C {
+  sfixed32 eventId = 1;
+}
+
+message MapEventTrainS2C {
+  repeated sfixed32 path = 1;
+}
+
+message MapEventCrabS2C {
+  repeated sfixed32 path = 1;
+}
+
+message GameProgressChangeS2C {
+  sfixed32 progress = 1;
+  sfixed32 maxProgress = 2;
+}
+
+message GameRoundChangeS2C {
+  sfixed32 round = 1;
+}
+
+message GamePassMapSuccessS2C {
+  message MapIdsEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  repeated MapIdsEntry mapIds = 1;
+}
+
+message GameScoreChangeS2C {
+  sfixed32 special_score = 1;
+  sfixed32 teamId = 2;
+}
+
+message LuckyStarMissionChangeS2C {
+  model.LuckyStarMission luckyStarMission = 1;
+  sfixed64 player_id = 2;
+}
+
+message MapStatusChangeS2C {
+  sfixed32 mapId = 1;
+  sfixed32 groupId = 2;
+  sfixed32 oldStatus = 3;
+  sfixed32 newStatus = 4;
+}
+
+message BuildingChangeS2C {
+  sfixed32 landBuildingGuid = 1;
+  sfixed32 buildId = 2;
+  sfixed64 playerId = 3;
+}
+
+message BuildingTriggerS2C {
+  sfixed32 landBuildingGuid = 1;
+  sfixed64 playerId = 2;
+}
+
+message LandTypeChangeS2C {
+  sfixed32 nodeId = 1;
+  sfixed32 oldLandType = 2;
+  sfixed32 newLandType = 3;
+  sfixed64 playerId = 4;
+}
+
+message MapIndexChangeS2C {
+  sfixed32 mapId = 1;
+  sfixed32 newIndex = 2;
+}
+
+message SurrenderPunishS2C {
+  sfixed64 time = 1;
+}
+
+message Day7RewardS2C {
+  message Day7Entry {
+    sfixed32 key = 1;
+    model.Day7Reward value = 2;
+  }
+  repeated Day7Entry day7 = 1;
+}
+
+message ActivityTaskS2C {
+  repeated model.ActivityInfo activityTask = 1;
+}
+
+message ActivityTaskCondition {
+  message CondEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  sfixed32 infoId = 1;
+  repeated CondEntry cond = 2;
+  model.ConditionData cond1 = 3;
+}
+
+message MonthlyCardS2C {
+  sfixed32 remDay = 1;
+}
+
+message MatchPunishmentS2C {
+  sfixed64 playerId = 1;
+  sfixed64 matchPunishmentTime = 2;
+  sfixed32 deductScore = 3;
+}
+
+message ChallengeDataChangeS2C {
+  message ChallengeDataEntry {
+    sfixed32 key = 1;
+    model.ChallengeData value = 2;
+  }
+  repeated ChallengeDataEntry challengeData = 1;
+  repeated sfixed32 passMapIds = 2;
+  bool isKnockoutMatch = 3;
+  bool isFinalMatch = 4;
+}
+
+message SysSendMailC2S {
+  message RewardsEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  string title = 1;
+  string sendName = 2;
+  string key = 3;
+  string context = 4;
+  sfixed64 playerId = 5;
+  sfixed64 serverAllId = 6;
+  repeated RewardsEntry rewards = 7;
+  sfixed64 sendTime = 8;
+  sfixed64 expireTime = 9;
+  sfixed64 startTime = 10;
+  bool isStarMail = 11;
+}
+
+message SysSendMailS2C {
+}
+
+message SysPlayerOnlineC2S {
+}
+
+message SysPlayerOnlineS2C {
+}
+
+message SysFightRecord {
+  model.PlayerFightRecord record = 1;
+  model.Hero.OfflineType offlineType = 2;
+}
+
+message SysCampaignAwardC2S {
+  message RewardsEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  sfixed32 levelId = 1;
+  repeated RewardsEntry rewards = 2;
+}
+
+message SysRecoupItemC2S {
+  message ItemsEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  repeated ItemsEntry items = 1;
+}
+
+message SysRecoupPayStarDiscC2S {
+  sfixed32 count = 1;
+  string payStarDiscSource = 2;
+}
+
+message SysCanPraiseInfoC2S {
+  message CanPraiseInfoEntry {
+    sfixed64 key = 1;
+    sfixed32 value = 2;
+  }
+  repeated CanPraiseInfoEntry canPraiseInfo = 1;
+}
+
+message SysCanPraiseInfoS2C {
+}
+
+message SysPraiseC2S {
+  sfixed64 playerId = 1;
+}
+
+message SysPraiseS2C {
+}
+
+message SysRoomFinishC2S {
+  message CondEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message KillMonstersEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message MissionCondEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message TeammateKillMonstersEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message RoomPlayerIdsEntry {
+    sfixed64 key = 1;
+    sfixed64 value = 2;
+  }
+  message TeammateStarCoinEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message KillPlayersEntry {
+    sfixed64 key = 1;
+    sfixed32 value = 2;
+  }
+  sfixed64 playerId = 1;
+  sfixed32 mapId = 2;
+  sfixed32 heroId = 3;
+  sfixed32 mapType = 4;
+  bool isWin = 5;
+  sfixed32 difficulty = 6;
+  sfixed32 progress = 7;
+  sfixed32 total_player_die = 8;
+  repeated CondEntry cond = 10;
+  sfixed32 round = 11;
+  sfixed32 goldRelicNum = 12;
+  int32 rank = 13;
+  repeated KillMonstersEntry killMonsters = 14;
+  repeated MissionCondEntry missionCond = 15;
+  repeated TeammateKillMonstersEntry teammateKillMonsters = 16;
+  bool isMatchRoom = 17;
+  repeated RoomPlayerIdsEntry roomPlayerIds = 18;
+  repeated TeammateStarCoinEntry teammateStarCoin = 19;
+  repeated KillPlayersEntry killPlayers = 20;
+  bool isLuckyStarRoom = 21;
+  model.GameStats gameStats = 22;
+}
+
+message SysCampaignFinishC2S {
+  message CondEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  sfixed64 playerId = 1;
+  sfixed32 mapType = 4;
+  sfixed32 levelId = 2;
+  repeated CondEntry cond = 10;
+}
+
+message SysRoomFinishS2C {
+}
+
+message SysRoomAddExpC2S {
+  message AwardsEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message RookieBonusAwardsEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message ReturnBonusAwardsEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  repeated AwardsEntry awards = 1;
+  repeated RookieBonusAwardsEntry rookieBonusAwards = 2;
+  repeated ReturnBonusAwardsEntry returnBonusAwards = 3;
+}
+
+message SysRoomAddExpS2C {
+}
+
+message GetQuestionUrlC2S {
+  sfixed32 activityId = 1;
+}
+
+message GetQuestionUrlS2C {
+  string url = 1;
+  sfixed32 id = 2;
+}
+
+message ScratchCardC2S {
+  sfixed32 activityId = 1;
+  sfixed32 index = 2;
+}
+
+message ScratchCardS2C {
+  sfixed32 activityId = 1;
+  sfixed32 index = 2;
+  sfixed32 configIndex = 3;
+}
+
+message NextScratchCardPoolC2S {
+  sfixed32 activityId = 1;
+}
+
+message NextScratchCardPoolS2C {
+  sfixed32 activityId = 1;
+  sfixed32 poolId = 2;
+}
+
+message FlipCardC2S {
+  sfixed32 activityId = 1;
+  sfixed32 index = 2;
+}
+
+message FlipCardS2C {
+  sfixed32 activityId = 1;
+  repeated sfixed32 index = 2;
+}
+
+message FlipCardProgressRewardC2S {
+  sfixed32 activityId = 1;
+}
+
+message FlipCardProgressRewardS2C {
+  sfixed32 activityId = 1;
+  repeated sfixed32 roundIndex = 2;
+}
+
+message SysGetShowFriendC2S {
+}
+
+message SysGetFriendInviteC2S {
+  sfixed64 roomId = 1;
+  sfixed64 playerId = 2;
+  sfixed64 time = 3;
+}
+
+message SysFriendInviteC2S {
+  model.FriendInvite msg = 1;
+}
+
+message SysFriendDelC2S {
+  sfixed64 playerId = 1;
+}
+
+message SysFriendInfoC2S {
+}
+
+message SysFriendAddC2S {
+  sfixed64 playerId = 1;
+}
+
+message SysFriendApplyC2S {
+  sfixed64 playerId = 1;
+}
+
+message SysFriendSendMsgC2S {
+  sfixed64 playerId = 1;
+  sfixed64 time = 2;
+  string msg = 3;
+}
+
+message SysSaveSimplePlayerInfoC2S {
+}
+
+message SysGmChangeNameC2S {
+  string name = 1;
+  sfixed32 cd = 2;
+}
+
+message SysSyncPlayerC2S {
+}
+
+message SyncPlayer {
+  model.Player player = 1;
+}
+
+message SysPlayerCreditScoreChangeC2S {
+  sfixed32 changeScore = 1;
+  string remark = 2;
+  sfixed32 actionType = 3;
+}
+
+message GMChangeCreditScoreC2S {
+  sfixed32 currScore = 1;
+}
+
+message SyncPlayerCreditInfoS2C {
+  sfixed32 deductScore = 1;
+  sfixed64 lastExemptedTime = 2;
+  sfixed32 lastExemptedActionType = 3;
+}
+
+message SysSyncPlayerMatchPunishmentTimeC2S {
+  int64 matchPunishmentTime = 1;
+}
+
+message PveHeroUpLvC2S {
+  message UseItemsEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  sfixed32 defId = 1;
+  repeated UseItemsEntry useItems = 2;
+}
+
+message PveHeroUpLvS2C {
+  message ReturnItemsEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  sfixed32 defId = 1;
+  sfixed32 lv = 2;
+  sfixed32 exp = 3;
+  repeated ReturnItemsEntry returnItems = 4;
+}
+
+message SysAbroadPayMsgC2S {
+  string isEffect = 1;
+  string isSandbox = 2;
+  string goodsId = 3;
+  string extra = 4;
+  string orderId = 5;
+}
+
+message SysChinaPayMsgC2S {
+  string isEffect = 1;
+  string isSandbox = 2;
+  string goodsId = 3;
+  string orderId = 4;
+  sfixed64 money = 5;
+}
+
+message AcquisitionMsgC2S {
+}
+
+message InviteSuccessS2C {
+  sfixed32 num = 1;
+}
+
+message InviteInfoNotifyS2C {
+  string inviteCode = 1;
+  string inviter = 2;
+  sfixed32 num = 3;
+}
+
+message AbroadCreateOrderC2S {
+  sfixed32 productId = 1;
+  sfixed32 quantity = 2;
+  sfixed32 type = 3;
+  sfixed32 CouponsId = 4;
+}
+
+message AbroadCreateOrderS2C {
+  sfixed32 goodsId = 1;
+  string cpExtInfo = 2;
+}
+
+message ChinaCreateOrderC2S {
+  sfixed32 productId = 1;
+  sfixed32 quantity = 2;
+  sfixed32 type = 3;
+  sfixed32 CouponsId = 4;
+}
+
+message ChinaCreateOrderS2C {
+  sfixed32 goodsId = 1;
+  string orderId = 2;
+  sfixed32 amount = 3;
+}
+
+message GetActivityPassRewardC2S {
+  repeated sfixed32 missionIds = 1;
+  sfixed32 defId = 2;
+}
+
+message GetActivityPassRewardS2C {
+  repeated sfixed32 missionIds = 1;
+  sfixed32 defId = 2;
+  sfixed32 gear = 3;
+}
+
+message ApplyChangeSlotC2S {
+  sfixed64 targetId = 1;
+  bool isCancel = 2;
+}
+
+message ApplyChangeSlotS2C {
+  sfixed64 playerId = 1;
+  sfixed64 targetId = 2;
+  bool isCancel = 3;
+}
+
+message OpsChangeSlotC2S {
+  bool isAgree = 1;
+  sfixed64 applyId = 2;
+}
+
+message OpsChangeSlotS2C {
+  message FinalSlotEntry {
+    sfixed64 key = 1;
+    sfixed32 value = 2;
+  }
+  bool isAgree = 1;
+  sfixed64 applyId = 2;
+  sfixed64 opsPlayerId = 3;
+  repeated FinalSlotEntry finalSlot = 4;
+}
+
+message ActivityPassGearChangeS2C {
+  sfixed32 gear = 1;
+  sfixed32 defId = 2;
+}
+
+message PayResultS2C {
+  message FirstBuyEntry {
+    sfixed32 key = 1;
+    model.RechargeBuyFirst value = 2;
+  }
+  repeated FirstBuyEntry firstBuy = 1;
+  sfixed32 MonthlyCardRemDays = 2;
+  sfixed32 type = 3;
+  sfixed32 goodsId = 4;
+  sfixed32 itemId = 5;
+  sfixed32 amount = 6;
+}
+
+message PayInfoChangeS2C {
+  sfixed32 agePosition = 1;
+  sfixed32 amount = 2;
+}
+
+message AgeVerifyC2S {
+  sfixed32 agePosition = 1;
+}
+
+message AgeVerifyS2C {
+  model.PayAmountInfo payAmountInfo = 1;
+}
+
+message ChangeNameC2S {
+  string nick = 1;
+}
+
+message ChangeNameS2C {
+  string playerName = 1;
+  sfixed64 nextChangeNameTime = 2;
+}
+
+message CategoryMissions {
+  sfixed32 Category = 1;
+  repeated Mission Missions = 2;
+}
+
+message Mission {
+  sfixed32 DefId = 1;
+  sfixed32 ProgressData = 2;
+  sfixed32 Status = 3;
+}
+
+message MissionTarget {
+  sfixed32 DefId = 1;
+  sfixed32 ProgressData = 2;
+}
+
+message SysMissionProgressData {
+}
+
+message SysQuestionC2S {
+  sfixed32 questionId = 1;
+}
+
+message NotifyQuestionS2C {
+  message QuestionInfoEntry {
+    sfixed32 key = 1;
+    model.QuestionModel value = 2;
+  }
+  repeated QuestionInfoEntry questionInfo = 1;
+}
+
+message TimeWastingC2S {
+  sfixed32 time = 1;
+}
+
+message TimeWastingS2C {
+  sfixed32 time = 1;
+  sfixed64 playerId = 2;
+}
+
+message CampScoreC2S {
+}
+
+message CampScoreS2C {
+  sfixed32 refreshTime = 1;
+  sfixed32 campId = 2;
+  sfixed32 campScorePercent = 3;
+}
+
+message PveHeroTalentUpC2S {
+  sfixed32 roleId = 1;
+  sfixed32 talentId = 2;
+}
+
+message PveHeroTalentUpS2C {
+  sfixed32 roleId = 1;
+  repeated sfixed32 Talents = 2;
+}
+
+message PlayerTaskNotifyS2C {
+  repeated model.TaskDSO tasks = 1;
+}
+
+message GuildTaskNotifyS2C {
+  repeated model.TaskDSO tasks = 1;
+}
+
+message UnLockDifficultyS2C {
+  sfixed32 difficulty = 1;
+}
+
+message TestRpcEchoC2S {
+  string data = 1;
+}
+
+message TestRpcEchoS2C {
+  string data = 1;
+}
+
+message ReplaySnapshotS2C {
+  sfixed64 playerId = 1;
+  model.Room room = 2;
+}
+
+message ReplayDieS2C {
+  sfixed64 playerId = 1;
+  sfixed32 heroId = 2;
+  sfixed64 killerId = 3;
+}
+
+message ClueNotifyS2C {
+  model.Clue clue = 1;
+}
+
+message protocol {
+  oneof msg {
+    SysSendMailC2S SysSendMailC2S = 101;
+    SysPlayerOnlineC2S SysPlayerOnlineC2S = 102;
+    PlayerOnlineRoomC2S PlayerOnlineRoomC2S = 103;
+    SysCanPraiseInfoC2S SysCanPraiseInfoC2S = 104;
+    SysPraiseC2S SysPraiseC2S = 105;
+    SysRoomFinishC2S SysRoomFinishC2S = 106;
+    SysRoomAddExpC2S SysRoomAddExpC2S = 107;
+    SysGetShowFriendC2S SysGetShowFriendC2S = 108;
+    SysFriendInviteC2S SysFriendInviteC2S = 109;
+    SysFriendDelC2S SysFriendDelC2S = 110;
+    SysFriendInfoC2S SysFriendInfoC2S = 111;
+    SysFriendApplyC2S SysFriendApplyC2S = 112;
+    SysFriendAddC2S SysFriendAddC2S = 113;
+    SysFriendSendMsgC2S SysFriendSendMsgC2S = 114;
+    SysCampaignFinishC2S SysCampaignFinishC2S = 115;
+    SysAbroadPayMsgC2S SysAbroadPayMsgC2S = 116;
+    AcquisitionMsgC2S AcquisitionMsgC2S = 117;
+    SysFightRecord SysFightRecord = 118;
+    SysCampaignAwardC2S SysCampaignAwardC2S = 119;
+    SysRecoupItemC2S SysRecoupItemC2S = 120;
+    SysPlayerOnlineRoomC2S SysPlayerOnlineRoomC2S = 121;
+    SysPlayerCleanC2S SysPlayerCleanC2S = 122;
+    SysPlayerPunishmentTimeC2S SysPlayerPunishmentTimeC2S = 123;
+    SysMatchSuccess SysMatchSuccess = 124;
+    SysChinaPayMsgC2S SysChinaPayMsgC2S = 125;
+    SysChangeMatchTeamState SysChangeMatchTeamState = 126;
+    SysSaveSimplePlayerInfoC2S SysSaveSimplePlayerInfoC2S = 127;
+    SysGmChangeNameC2S SysGmChangeNameC2S = 128;
+    SysSyncPlayerC2S SysSyncPlayerC2S = 129;
+    SysPlayerCreditScoreChangeC2S SysPlayerCreditScoreChangeC2S = 130;
+    SysSyncPlayerMatchPunishmentTimeC2S SysSyncPlayerMatchPunishmentTimeC2S = 131;
+    GMChangeCreditScoreC2S GMChangeCreditScoreC2S = 132;
+    SysPushReturnInfoC2S SysPushReturnInfoC2S = 133;
+    SysMutePlayerC2S SysMutePlayerC2S = 134;
+    SysQuestionC2S SysQuestionC2S = 135;
+    SysRecoupPayStarDiscC2S SysRecoupPayStarDiscC2S = 136;
+    KickS2C KickS2C = 1001;
+    PredictActionS2C PredictActionS2C = 1002;
+    RunningGameS2C RunningGameS2C = 1003;
+    BattleS2C BattleS2C = 1007;
+    LotteryDrawS2C LotteryDrawS2C = 1011;
+    LandBuffsS2C LandBuffsS2C = 1013;
+    RoundStartS2C RoundStartS2C = 1015;
+    GameFinishS2C GameFinishS2C = 1016;
+    MonsterRefreshS2C MonsterRefreshS2C = 1018;
+    MovePointBuffS2C MovePointBuffS2C = 1019;
+    ChangeDirS2C ChangeDirS2C = 1020;
+    GambleChangeS2C GambleChangeS2C = 1022;
+    HeroBarBoxChangeS2C HeroBarBoxChangeS2C = 1023;
+    RoomNotifyS2C RoomNotifyS2C = 1024;
+    ActionStartNotifyS2C ActionStartNotifyS2C = 1026;
+    NoGambleNotifyS2C NoGambleNotifyS2C = 1031;
+    GambleObServeS2C GambleObServeS2C = 1034;
+    UpdateHeroAttrS2C UpdateHeroAttrS2C = 1040;
+    ChangePlayerSlotS2C ChangePlayerSlotS2C = 1042;
+    BossSleepS2C BossSleepS2C = 1043;
+    RefMallS2C RefMallS2C = 1044;
+    BagItemChangeS2C BagItemChangeS2C = 1045;
+    RoleCardChangeS2C RoleCardChangeS2C = 1046;
+    TaskConditionS2C TaskConditionS2C = 1047;
+    TaskInfoS2C TaskInfoS2C = 1048;
+    PlayerOnlineS2C PlayerOnlineS2C = 1049;
+    ChangeExpS2C ChangeExpS2C = 1050;
+    MailAddS2C MailAddS2C = 1051;
+    OnlineSyncRoomIdS2C OnlineSyncRoomIdS2C = 1052;
+    NoticeS2C NoticeS2C = 1053;
+    ActivityTaskConditionS2C ActivityTaskConditionS2C = 1054;
+    MapEventS2C MapEventS2C = 1055;
+    Day7RewardS2C Day7RewardS2C = 1056;
+    MapEventTrainS2C MapEventTrainS2C = 1057;
+    ChangePraiseNumS2C ChangePraiseNumS2C = 1058;
+    MonthlyCardS2C MonthlyCardS2C = 1059;
+    MailDelS2C MailDelS2C = 1060;
+    FriendNotifyS2C FriendNotifyS2C = 1061;
+    FriendListChangeS2C FriendListChangeS2C = 1062;
+    FriendInviteNotifyS2C FriendInviteNotifyS2C = 1063;
+    LoopNoticeS2C LoopNoticeS2C = 1064;
+    BattlePassLvS2C BattlePassLvS2C = 1065;
+    BattlePassTaskInfoS2C BattlePassTaskInfoS2C = 1066;
+    BattlePassUpdateTaskS2C BattlePassUpdateTaskS2C = 1067;
+    BattlePassBuyS2C BattlePassBuyS2C = 1068;
+    BattlePassInfoS2C BattlePassInfoS2C = 1069;
+    FriendsChatMsgS2C FriendsChatMsgS2C = 1070;
+    GameProgressChangeS2C GameProgressChangeS2C = 1071;
+    MapMissionNotifyS2C MapMissionNotifyS2C = 1072;
+    ChangeItemLimitS2C ChangeItemLimitS2C = 1073;
+    CleanItemLimitS2C CleanItemLimitS2C = 1074;
+    CampaignPassS2C CampaignPassS2C = 1075;
+    CampaignNotifyS2C CampaignNotifyS2C = 1076;
+    KillMessageS2C KillMessageS2C = 1077;
+    GameScoreChangeS2C GameScoreChangeS2C = 1078;
+    SignInRewardS2C SignInRewardS2C = 1079;
+    PayResultS2C PayResultS2C = 1080;
+    PayInfoChangeS2C PayInfoChangeS2C = 1081;
+    InviteSuccessS2C InviteSuccessS2C = 1082;
+    InviteInfoNotifyS2C InviteInfoNotifyS2C = 1083;
+    MapStatusChangeS2C MapStatusChangeS2C = 1084;
+    GachaCountS2C GachaCountS2C = 1085;
+    MapIndexChangeS2C MapIndexChangeS2C = 1086;
+    SurrenderPunishS2C SurrenderPunishS2C = 1087;
+    GamePassMapSuccessS2C GamePassMapSuccessS2C = 1088;
+    FriendDelNotifyS2C FriendDelNotifyS2C = 1090;
+    BagExpiredTransformNotify BagExpiredTransformNotify = 1091;
+    MapEventCrabS2C MapEventCrabS2C = 1092;
+    PkAfterVoteS2C PkAfterVoteS2C = 1093;
+    PlayerTaskNotifyS2C PlayerTaskNotifyS2C = 1094;
+    UnLockDifficultyS2C UnLockDifficultyS2C = 1095;
+    HeroSkillMoveEffectS2C HeroSkillMoveEffectS2C = 1096;
+    TimeOutKickPlayerS2C TimeOutKickPlayerS2C = 1097;
+    SayPhraseNotifyS2C SayPhraseNotifyS2C = 1098;
+    MatchTeamInviteNotify MatchTeamInviteNotify = 1099;
+    RefreshMatchTeamStateNotify RefreshMatchTeamStateNotify = 1100;
+    ActivityPassGearChangeS2C ActivityPassGearChangeS2C = 1101;
+    SingleGameScoreChangeS2C SingleGameScoreChange = 1102;
+    DelayProgressMapEventS2C DelayProgressMapEventS2C = 1103;
+    LuckyStarMissionChangeS2C LuckyStarMissionChangeS2C = 1104;
+    MatchPunishmentS2C MatchPunishmentS2C = 1105;
+    ChallengeDataChangeS2C ChallengeDataChangeS2C = 1106;
+    GmUnlockRoleInfoS2C GmUnlockRoleInfoS2C = 1107;
+    SyncPlayerCreditInfoS2C SyncPlayerCreditInfoS2C = 1108;
+    RoomHeroCardChangeS2C RoomHeroCardChangeS2C = 1109;
+    RoomRoundAddTermS2C RoomRoundAddTermS2C = 1110;
+    ReturnInfoS2C ReturnInfoS2C = 1111;
+    SyncRelicsS2C SyncRelicsS2C = 1112;
+    ReplaySnapshotS2C ReplaySnapshotS2C = 1113;
+    ClueNotifyS2C ClueNotifyS2C = 1114;
+    ReplayDieS2C ReplayDieS2C = 1115;
+    GuildTaskNotifyS2C GuildTaskNotifyS2C = 1116;
+    GameRoundChangeS2C GameRoundChangeS2C = 1117;
+    BuildingChangeS2C BuildingChangeS2C = 1118;
+    LandTypeChangeS2C LandTypeChangeS2C = 1119;
+    NotifyQuestionS2C NotifyQuestionS2C = 1120;
+    ConnectC2S ConnectHandle = 5001;
+    ConnectS2C Connect = 5002;
+    HeartbeatC2S HeartbeatHandle = 5003;
+    HeartbeatS2C Heartbeat = 5004;
+    CreateRoomC2S CreateRoomHandle = 5005;
+    CreateRoomS2C CreateRoom = 5006;
+    SyncRoomC2S SyncRoomHandle = 5007;
+    SyncRoomS2C SyncRoom = 5008;
+    JoinRoomC2S JoinRoomHandle = 5009;
+    JoinRoomS2C JoinRoom = 5010;
+    ExitRoomC2S ExitRoomHandle = 5011;
+    ExitRoomS2C ExitRoom = 5012;
+    QueryRoomC2S QueryRoomHandle = 5013;
+    QueryRoomS2C QueryRoom = 5014;
+    RefreshRoomStateC2S RefreshRoomStateHandle = 5015;
+    RefreshRoomStateS2C RefreshRoomState = 5016;
+    StartGameC2S StartGameHandle = 5019;
+    StartGameS2C StartGame = 5020;
+    ThrowDiceC2S ThrowDiceHandle = 5021;
+    ThrowDiceS2C ThrowDice = 5022;
+    ChangeRoomC2S ChangeRoomHandle = 5023;
+    ChangeRoomS2C ChangeRoom = 5024;
+    MoveC2S MoveHandle = 5027;
+    MoveS2C Move = 5028;
+    ShopBuyC2S ShopBuyHandle = 5029;
+    ShopBuyS2C ShopBuy = 5030;
+    PursuitC2S PursuitHandle = 5033;
+    PursuitS2C Pursuit = 5034;
+    BattleUseCardC2S BattleUseCardHandle = 5035;
+    BattleUseCardS2C BattleUseCard = 5036;
+    BattleThrowDiceC2S BattleThrowDiceHandle = 5037;
+    BattleThrowDiceS2C BattleThrowDice = 5038;
+    BattleChoiceC2S BattleChoiceHandle = 5039;
+    BattleChoiceS2C BattleChoice = 5040;
+    LotteryChoiceC2S LotteryChoiceHandle = 5041;
+    LotteryChoiceS2C LotteryChoice = 5042;
+    MoveAgainC2S MoveAgainHandle = 5043;
+    MoveAgainS2C MoveAgain = 5044;
+    AskBattleC2S AskBattleHandle = 5047;
+    AskBattleS2C AskBattle = 5048;
+    RollGoldC2S RollGoldHandle = 5049;
+    RollGoldS2C RollGold = 5050;
+    EventThrowDiceC2S EventThrowDiceHandle = 5051;
+    EventThrowDiceS2C EventThrowDice = 5052;
+    TriggerEventC2S TriggerEventHandle = 5053;
+    TriggerEventS2C TriggerEvent = 5054;
+    UseEffectCardC2S UseEffectCardHandle = 5055;
+    UseEffectCardS2C UseEffectCard = 5056;
+    BombThrowDiceC2S BombThrowDiceHandle = 5059;
+    BombThrowDiceS2C BombThrowDice = 5060;
+    ChoiceDirectionC2S ChoiceDirectionHandle = 5061;
+    ChoiceDirectionS2C ChoiceDirection = 5062;
+    LandChoiceTargetC2S LandChoiceTargetHandle = 5063;
+    LandChoiceTargetS2C LandChoiceTarget = 5064;
+    ThrowDiceResultC2S ThrowDiceResultHandle = 5067;
+    ThrowDiceResultS2C ThrowDiceResult = 5068;
+    TriggerDivinationC2S TriggerDivinationHandle = 5069;
+    TriggerDivinationS2C TriggerDivination = 5070;
+    TriggerDestinyC2S TriggerDestinyHandle = 5071;
+    TriggerDestinyS2C TriggerDestiny = 5072;
+    UseQuickCardC2S UseQuickCardHandle = 5073;
+    UseQuickCardS2C UseQuickCard = 5074;
+    AbandonCardC2S AbandonCardHandle = 5075;
+    AbandonCardS2C AbandonCard = 5076;
+    StopOrContinueC2S StopOrContinueHandle = 5077;
+    StopOrContinueS2C StopOrContinue = 5078;
+    StartGambleC2S StartGambleHandle = 5081;
+    StartGambleS2C StartGamble = 5082;
+    GambleThrowDicC2S GambleThrowDicHandle = 5083;
+    GambleThrowDicS2C GambleThrowDic = 5084;
+    ChoiceHeroC2S2 ChoiceHeroC2S2Handle = 5085;
+    ChoiceHeroS2C2 ChoiceHero2 = 5086;
+    AffirmHeroC2S AffirmHeroHandle = 5087;
+    AffirmHeroS2C AffirmHero = 5088;
+    SearchRoomC2S SearchRoomHandle = 5089;
+    SearchRoomS2C SearchRoom = 5090;
+    GmC2S GmHandle = 5091;
+    GmS2C Gm = 5092;
+    TriggerHospitalC2S TriggerHospitalHandle = 5093;
+    TriggerHospitalS2C TriggerHospital = 5094;
+    SendChatC2S SendChatHandle = 5095;
+    SendChatS2C SendChat = 5096;
+    PlayerShopBuyC2S PlayerShopBuyC2S = 5097;
+    PlayerShopBuyS2C PlayerShopBuyS2C = 5098;
+    PlayerUseItemC2S PlayerUseItemHandle = 5099;
+    PlayerUseItemS2C PlayerUseItem = 5100;
+    UseTreasureC2S UseTreasureC2S = 5101;
+    UseTreasureS2C UseTreasureS2C = 5102;
+    UseTreasureAutoTransformC2S UseTreasureAutoTransformC2S = 5123;
+    UseTreasureAutoTransformS2C UseTreasureAutoTransformS2C = 5124;
+    SetFashionC2S SetFashionC2S = 5103;
+    SetFashionS2C SetFashionS2C = 5104;
+    SelectFashionPlanC2S SelectFashionPlanC2S = 5105;
+    SelectFashionPlanS2C SelectFashionPlanS2C = 5106;
+    GachaC2S GachaC2S = 5107;
+    GachaS2C GachaS2C = 5108;
+    SteamSearchRoomC2S SteamSearchRoomC2S = 5109;
+    SteamSearchRoomS2C SteamSearchRoomS2C = 5110;
+    CheatItemC2S CheatItemHandle = 5111;
+    CheatItemS2C CheatItem = 5112;
+    RoleCardUpLvC2S RoleCardUpLvC2S = 5113;
+    RoleCardUpLvS2C RoleCardUpLvS2C = 5114;
+    RoleCardBreakThroughC2S RoleCardBreakThroughC2S = 5115;
+    RoleCardBreakThroughS2C RoleCardBreakThroughS2C = 5116;
+    RoleCardChoiceResC2S RoleCardChoiceResC2S = 5117;
+    RoleCardChoiceResS2C RoleCardChoiceResS2C = 5118;
+    TaskRewardC2S TaskRewardC2S = 5119;
+    TaskRewardS2C TaskRewardS2C = 5120;
+    TeachingC2S TeachingC2S = 5121;
+    TeachingS2C TeachingS2C = 5122;
+    QuickJoinRoomC2S QuickJoinRoomC2S = 5125;
+    QuickJoinRoomS2C QuickJoinRoomS2C = 5126;
+    RoomKickPlayerC2S RoomKickPlayerC2S = 5127;
+    RoomKickPlayerS2C RoomKickPlayerS2C = 5128;
+    RoomAbdicationC2S RoomAbdicationC2S = 5129;
+    RoomAbdicationS2C RoomAbdicationS2C = 5130;
+    RoomReadyC2S RoomReadyC2S = 5131;
+    RoomReadyS2C RoomReadyS2C = 5132;
+    ChargeCreateC2S ChargeCreateC2S = 5133;
+    ChargeCreateS2C ChargeCreateS2C = 5134;
+    ChargeC2S ChargeC2S = 5135;
+    ChargeS2C ChargeS2C = 5136;
+    GiftCdkC2S GiftCdkC2S = 5137;
+    GiftCdkS2C GiftCdkS2C = 5138;
+    MailReadC2S MailReadC2S = 5139;
+    MailReadS2C MailReadS2C = 5140;
+    MailGetRewardC2S MailGetRewardC2S = 5141;
+    MailGetRewardS2C MailGetRewardS2C = 5142;
+    MailDelReadC2S MailDelReadC2S = 5143;
+    MailDelReadS2C MailDelReadS2C = 5144;
+    GachaRecordC2S GachaRecordC2S = 5145;
+    GachaRecordS2C GachaRecordS2C = 5146;
+    ActivityTaskRewardC2S ActivityTaskRewardC2S = 5147;
+    ActivityTaskRewardS2C ActivityTaskRewardS2C = 5148;
+    RoomShortChatC2S RoomShortChatC2S = 5149;
+    RoomShortChatS2C RoomShortChatS2C = 5150;
+    SetShowPlayerC2S SetShowPlayerC2S = 5151;
+    SetShowPlayerS2C SetShowPlayerS2C = 5152;
+    GetShowPlayerC2S GetShowPlayerC2S = 5153;
+    GetShowPlayerS2C GetShowPlayerS2C = 5154;
+    GetPlayerFightRecordC2S GetPlayerFightRecordC2S = 5155;
+    GetPlayerFightRecordS2C GetPlayerFightRecordS2C = 5156;
+    GetDay7RewardC2S GetDay7RewardC2S = 5157;
+    GetDay7RewardS2C GetDay7RewardS2C = 5158;
+    PraisePlayerC2S PraisePlayerC2S = 5159;
+    PraisePlayerS2C PraisePlayerS2C = 5160;
+    ClientDataUploadC2S ClientDataUploadC2S = 5161;
+    ClientDataUploadS2C ClientDataUploadS2C = 5162;
+    FriendListC2S FriendListC2S = 5163;
+    FriendListS2C FriendListS2C = 5164;
+    FriendApplyC2S FriendApplyC2S = 5165;
+    FriendApplyS2C FriendApplyS2C = 5166;
+    FriendApplyListC2S FriendApplyListC2S = 5167;
+    FriendApplyListS2C FriendApplyListS2C = 5168;
+    FriendApplyOpC2S FriendApplyOpC2S = 5169;
+    FriendApplyOpS2C FriendApplyOpS2C = 5170;
+    FriendOpC2S FriendOpC2S = 5171;
+    FriendOpS2C FriendOpS2C = 5172;
+    FriendInviteC2S FriendInviteC2S = 5173;
+    FriendInviteS2C FriendInviteS2C = 5174;
+    FriendInviteListC2S FriendInviteListC2S = 5175;
+    FriendInviteListS2C FriendInviteListS2C = 5176;
+    FriendInviteCleanC2S FriendInviteCleanC2S = 5179;
+    FriendInviteCleanS2C FriendInviteCleanS2C = 5180;
+    FriendBlacksListC2S FriendBlacksListC2S = 5181;
+    FriendBlacksListS2C FriendBlacksListS2C = 5182;
+    NearFightPlayerC2S NearFightPlayerC2S = 5183;
+    NearFightPlayerS2C NearFightPlayerS2C = 5184;
+    SearchPlayerC2S SearchPlayerC2S = 5185;
+    SearchPlayerS2C SearchPlayerS2C = 5186;
+    ScratchCardC2S ScratchCardC2S = 5187;
+    ScratchCardS2C ScratchCardS2C = 5188;
+    NextScratchCardPoolC2S NextScratchCardPoolC2S = 5189;
+    NextScratchCardPoolS2C NextScratchCardPoolS2C = 5190;
+    WatchJoinRoomC2S WatchJoinRoomC2S = 5191;
+    WatchJoinRoomS2C WatchJoinRoomS2C = 5192;
+    WatchRefreshRoomStateC2S WatchRefreshRoomStateC2S = 5193;
+    WatchRefreshRoomStateS2C WatchRefreshRoomStateS2C = 5194;
+    WatchExitRoomC2S WatchExitRoomC2S = 5195;
+    WatchExitRoomS2C WatchExitRoomS2C = 5196;
+    BattlePassGetRewardC2S BattlePassGetRewardC2S = 5197;
+    BattlePassGetRewardS2C BattlePassGetRewardS2C = 5198;
+    BattlePassTaskRewardC2S BattlePassTaskRewardC2S = 5199;
+    BattlePassTaskRewardS2C BattlePassTaskRewardS2C = 5200;
+    BattlePassUpLvC2S BattlePassUpLvC2S = 5201;
+    BattlePassUpLvS2C BattlePassUpLvS2C = 5202;
+    FriendSendMsgC2S FriendSendMsgC2S = 5203;
+    FriendSendMsgS2C FriendSendMsgS2C = 5204;
+    GetChatMsgC2S GetChatMsgC2S = 5205;
+    GetChatMsgS2C GetChatMsgS2C = 5206;
+    ReadChatMsgC2S ReadChatMsgC2S = 5207;
+    ReadChatMsgS2C ReadChatMsgS2C = 5208;
+    DelChatMsgInfoC2S DelChatMsgInfoC2S = 5209;
+    DelChatMsgInfoS2C DelChatMsgInfoS2C = 5210;
+    SelectRelicC2S SelectRelicC2S = 5211;
+    SelectRelicS2C SelectRelicS2C = 5212;
+    MonsterPursuitC2S MonsterPursuitC2S = 5213;
+    MonsterPursuitS2C MonsterPursuitS2C = 5214;
+    PVEShopBuyC2S PVEShopBuyC2S = 5215;
+    PVEShopBuyS2C PVEShopBuyS2C = 5216;
+    ClientCheckTaskC2S ClientCheckTaskC2S = 5217;
+    ClientCheckTaskS2C ClientCheckTaskS2C = 5218;
+    PveHeroUpLvC2S PveHeroUpLvC2S = 5219;
+    PveHeroUpLvS2C PveHeroUpLvS2C = 5220;
+    StartMatchC2S StartMatchC2S = 5221;
+    StartMatchS2C StartMatchS2C = 5222;
+    CancelMatchC2S CancelMatchC2S = 5223;
+    CancelMatchS2C CancelMatchS2C = 5224;
+    MatchSuccessC2S MatchSuccessC2S = 5225;
+    MatchSuccessS2C MatchSuccessS2C = 5226;
+    AccuseC2S AccuseC2S = 5227;
+    AccuseS2C AccuseS2C = 5228;
+    SingleCampaignC2S SingleCampaignC2S = 5229;
+    SingleCampaignS2C SingleCampaignS2C = 5230;
+    DevChargeC2S DevChargeC2S = 5231;
+    DevChargeS2C DevChargeS2C = 5232;
+    AskReviveTeammateC2S AskReviveTeammateC2S = 5233;
+    AskReviveTeammateS2C AskReviveTeammateS2C = 5234;
+    GetSignInRewardC2S GetSignInRewardC2S = 5235;
+    GetSignInRewardS2C GetSignInRewardS2C = 5236;
+    ChatMapMarkersC2S ChatMapMarkersC2S = 5237;
+    ChatMapMarkersS2C ChatMapMarkersS2C = 5238;
+    AbroadCreateOrderC2S AbroadCreateOrderC2S = 5239;
+    AbroadCreateOrderS2C AbroadCreateOrderS2C = 5240;
+    AgeVerifyC2S AgeVerifyC2S = 5243;
+    AgeVerifyS2C AgeVerifyS2C = 5244;
+    ChangeNameC2S ChangeNameC2S = 5245;
+    ChangeNameS2C ChangeNameS2C = 5246;
+    ClientClickConfirmTaskC2S ClientClickConfirmTaskC2S = 5247;
+    ClientClickConfirmTaskS2C ClientClickConfirmTaskS2C = 5248;
+    BuyRelicC2S BuyRelicC2S = 5249;
+    BuyRelicS2C BuyRelicS2C = 5250;
+    BuyLightGiftC2S BuyLightGiftC2S = 5251;
+    BuyLightGiftS2C BuyLightGiftS2C = 5252;
+    LightGiftC2S LightGiftC2S = 5253;
+    LightGiftS2C LightGiftS2C = 5254;
+    AcquisitionC2S AcquisitionC2S = 5255;
+    AcquisitionS2C AcquisitionS2C = 5256;
+    AcquisitionRewardC2S AcquisitionRewardC2S = 5257;
+    AcquisitionRewardS2C AcquisitionRewardS2C = 5258;
+    SelectMechanismC2S SelectMechanismC2S = 5259;
+    SelectMechanismS2C SelectMechanismS2C = 5260;
+    GachaCountRewardC2S GachaCountRewardC2S = 5261;
+    GachaCountRewardS2C GachaCountRewardS2C = 5262;
+    GetPlayerSimpleC2S GetPlayerSimpleC2S = 5263;
+    GetPlayerSimpleS2C GetPlayerSimpleS2C = 5264;
+    RoleCardCollectC2S RoleCardCollectC2S = 5265;
+    RoleCardCollectS2C RoleCardCollectS2C = 5266;
+    GMPlayerSettingC2S GMPlayerSettingC2S = 5267;
+    GMPlayerSettingS2C GMPlayerSettingS2C = 5268;
+    SetFriendNoteC2S SetFriendNoteC2S = 5269;
+    SetFriendNoteS2C SetFriendNoteS2C = 5270;
+    SetOnlineStatusC2S SetOnlineStatusC2S = 5271;
+    SetOnlineStatusS2C SetOnlineStatusS2C = 5272;
+    ChooseSkinC2S ChooseSkinC2S = 5305;
+    ChooseSkinS2C ChooseSkinS2C = 5306;
+    TimeWastingC2S TimeWastingC2S = 5307;
+    TimeWastingS2C TimeWastingS2C = 5308;
+    VoteC2S VoteC2S = 5309;
+    VoteS2C VoteS2C = 5310;
+    VoteSelectC2S VoteSelectC2S = 5311;
+    VoteSelectS2C VoteSelectS2C = 5312;
+    NotifyStoryC2S NotifyStoryC2S = 5313;
+    NotifyStoryS2C NotifyStoryS2C = 5314;
+    PveHeroTalentUpC2S PveHeroTalentUpC2S = 5315;
+    PveHeroTalentUpS2C PveHeroTalentUpS2C = 5316;
+    SelectEventC2S SelectEventC2S = 5317;
+    SelectEventS2C SelectEventS2C = 5318;
+    CampScoreC2S CampScoreC2S = 5319;
+    CampScoreS2C CampScoreS2C = 5320;
+    ActivityMissionRewardC2S ActivityMissionRewardC2S = 5321;
+    ActivityMissionRewardS2C ActivityMissionRewardS2C = 5322;
+    VendorBuyCardC2S VendorBuyCardC2S = 5323;
+    VendorBuyCardS2C VendorBuyCardS2C = 5324;
+    TransferStarDiscC2S TransferStarDiscC2S = 5325;
+    TransferStarDiscS2C TransferStarDiscS2C = 5326;
+    GetHeroInfoC2S GetHeroInfoC2S = 5327;
+    GetHeroInfoS2C GetHeroInfoS2C = 5328;
+    CreateMatchTeamC2S CreateMatchTeamC2S = 5329;
+    CreateMatchTeamS2C CreateMatchTeamS2C = 5330;
+    ChangeMatchTeamC2S ChangeMatchTeamC2S = 5331;
+    ChangeMatchTeamS2C ChangeMatchTeamS2C = 5332;
+    JoinMatchTeamC2S JoinMatchTeamC2S = 5333;
+    JoinMatchTeamS2C JoinMatchTeamS2C = 5334;
+    ExitMatchTeamC2S ExitMatchTeamC2S = 5335;
+    ExitMatchTeamS2C ExitMatchTeamS2C = 5336;
+    RefreshMatchTeamInfoC2S RefreshMatchTeamInfoC2S = 5337;
+    RefreshMatchTeamInfoS2C RefreshMatchTeamInfoS2C = 5338;
+    ChinaCreateOrderC2S ChinaCreateOrderC2S = 5339;
+    ChinaCreateOrderS2C ChinaCreateOrderS2C = 5340;
+    MatchTeamInviteC2S MatchTeamInviteC2S = 5341;
+    MatchTeamInviteS2C MatchTeamInviteS2C = 5342;
+    MatchTeamChatC2S MatchTeamChatC2S = 5343;
+    MatchTeamChatS2C MatchTeamChatS2C = 5344;
+    MatchTeamReadyC2S MatchTeamReadyC2S = 5345;
+    MatchTeamReadyS2C MatchTeamReadyS2C = 5346;
+    PlayerChatC2S PlayerChatC2S = 5347;
+    PlayerChatS2C PlayerChatS2C = 5348;
+    SyncSingleGameDataC2S SyncSingleGameDataC2S = 5349;
+    SyncSingleGameDataS2C SyncSingleGameDataS2C = 5350;
+    SingleGameDataC2S SingleGameDataC2S = 5351;
+    SingleGameDataS2C SingleGameDataS2C = 5352;
+    GetActivityPassRewardC2S GetActivityPassRewardC2S = 5353;
+    GetActivityPassRewardS2C GetActivityPassRewardS2C = 5354;
+    ApplyChangeSlotC2S ApplyChangeSlotC2S = 5355;
+    ApplyChangeSlotS2C ApplyChangeSlotS2C = 5356;
+    OpsChangeSlotC2S OpsChangeSlotC2S = 5357;
+    OpsChangeSlotS2C OpsChangeSlotS2C = 5358;
+    RookieGachaRewardC2S RookieGachaRewardC2S = 5359;
+    RookieGachaRewardS2C RookieGachaRewardS2C = 5360;
+    LiveGiftPackageC2S LiveGiftPackageC2S = 5361;
+    LiveGiftPackageS2C LiveGiftPackageS2C = 5362;
+    LaborActDiceC2S LaborActDiceC2S = 5363;
+    LaborActDiceS2C LaborActDiceS2C = 5364;
+    ActionOverTimeLogC2S ActionOverTimeLogC2S = 5365;
+    ActionOverTimeLogS2C ActionOverTimeLogS2C = 5366;
+    ClientHarmonyC2S ClientHarmonyC2S = 5369;
+    ClientHarmonyS2C ClientHarmonyS2C = 5370;
+    MailStarC2S MailStarC2S = 5371;
+    MailStarS2C MailStarS2C = 5372;
+    SetCardAltArtC2S SetCardAltArtC2S = 5373;
+    SetCardAltArtS2C SetCardAltArtS2C = 5374;
+    SelectRewardCardC2S SelectRewardCardC2S = 5377;
+    SelectRewardCardS2C SelectRewardCardS2C = 5378;
+    GetReturnInfoC2S GetReturnInfoC2S = 5379;
+    GetReturnInfoS2C GetReturnInfoS2C = 5380;
+    ReturnGiftClaimC2S ReturnGiftClaimC2S = 5381;
+    ReturnGiftClaimS2C ReturnGiftClaimS2C = 5382;
+    ReturnSignInClaimC2S ReturnSignInClaimC2S = 5383;
+    ReturnSignInClaimS2C ReturnSignInClaimS2C = 5384;
+    ReturnSurveyFinishC2S ReturnSurveyFinishC2S = 5385;
+    ReturnSurveyFinishS2C ReturnSurveyFinishS2C = 5386;
+    FlipCardC2S FlipCardC2S = 5387;
+    FlipCardS2C FlipCardS2C = 5388;
+    FlipCardProgressRewardC2S FlipCardProgressRewardC2S = 5389;
+    FlipCardProgressRewardS2C FlipCardProgressRewardS2C = 5390;
+    GetMatchEstimatedWaitTimeC2S GetMatchEstimatedWaitTimeC2S = 5391;
+    GetMatchEstimatedWaitTimeS2C GetMatchEstimatedWaitTimeS2C = 5392;
+    GetHeroRoundEffectC2S GetHeroRoundEffectC2S = 5393;
+    GetHeroRoundEffectS2C GetHeroRoundEffectS2C = 5394;
+    GetQuestionUrlC2S GetQuestionUrlC2S = 5395;
+    GetQuestionUrlS2C GetQuestionUrlS2C = 5396;
+    SyncPlayerGuildS2C SyncPlayerGuildS2C = 2001;
+    SyncPlayerJoinGuildS2C SyncPlayerJoinGuildS2C = 2002;
+    GuildChatMsgS2C GuildChatMsgS2C = 2003;
+    SyncGuildS2C SyncGuildS2C = 2004;
+    SyncGuildMemberS2C SyncGuildMemberS2C = 2005;
+    SyncGuildMemberExitS2C SyncGuildMemberExitS2C = 2006;
+    SyncGuildApplicationS2C SyncGuildApplicationS2C = 2007;
+    CreateGuildC2S CreateGuildC2S = 9001;
+    CreateGuildS2C CreateGuildS2C = 9002;
+    SearchGuildC2S SearchGuildC2S = 9003;
+    SearchGuildS2C SearchGuildS2C = 9004;
+    ApplyToGuildC2S ApplyToGuildC2S = 9005;
+    ApplyToGuildS2C ApplyToGuildS2C = 9006;
+    ProcessGuildApplicationC2S ProcessGuildApplicationC2S = 9007;
+    ProcessGuildApplicationS2C ProcessGuildApplicationS2C = 9008;
+    SendGuildInvitationC2S SendGuildInvitationC2S = 9009;
+    SendGuildInvitationS2C SendGuildInvitationS2C = 9010;
+    ProcessGuildInvitationC2S ProcessGuildInvitationC2S = 9011;
+    ProcessGuildInvitationS2C ProcessGuildInvitationS2C = 9012;
+    GetGuildInfoC2S GetGuildInfoC2S = 9013;
+    GetGuildInfoS2C GetGuildInfoS2C = 9014;
+    UpdateGuildSettingsC2S UpdateGuildSettingsC2S = 9015;
+    UpdateGuildSettingsS2C UpdateGuildSettingsS2C = 9016;
+    UpdateGuildInAnnouncementC2S UpdateGuildInAnnouncementC2S = 9017;
+    UpdateGuildInAnnouncementS2C UpdateGuildInAnnouncementS2C = 9018;
+    TransferGuildMasterC2S TransferGuildMasterC2S = 9019;
+    TransferGuildMasterS2C TransferGuildMasterS2C = 9020;
+    ChangeGuildMemberTitleC2S ChangeGuildMemberTitleC2S = 9021;
+    ChangeGuildMemberTitleS2C ChangeGuildMemberTitleS2C = 9022;
+    KickGuildMemberC2S KickGuildMemberC2S = 9023;
+    KickGuildMemberS2C KickGuildMemberS2C = 9024;
+    ImpeachGuildMasterC2S ImpeachGuildMasterC2S = 9025;
+    ImpeachGuildMasterS2C ImpeachGuildMasterS2C = 9026;
+    ExitGuildC2S ExitGuildC2S = 9027;
+    ExitGuildS2C ExitGuildS2C = 9028;
+    DisbandGuildC2S DisbandGuildC2S = 9029;
+    DisbandGuildS2C DisbandGuildS2C = 9030;
+    GuildMissionRewardC2S GuildMissionRewardC2S = 9031;
+    GuildMissionRewardS2C GuildMissionRewardS2C = 9032;
+    GetGuildMemberChangeMsgC2S GetGuildMemberChangeMsgC2S = 9033;
+    GetGuildMemberChangeMsgS2C GetGuildMemberChangeMsgS2C = 9034;
+    SendGuildChatMsgC2S SendGuildChatMsgC2S = 9035;
+    SendGuildChatMsgS2C SendGuildChatMsgS2C = 9036;
+    GetGuildChatMsgC2S GetGuildChatMsgC2S = 9037;
+    GetGuildChatMsgS2C GetGuildChatMsgS2C = 9038;
+    GuildMemberC2S GuildMemberC2S = 9039;
+    GuildMemberS2C GuildMemberS2C = 9040;
+    GetGuildsInfoC2S GetGuildsInfoC2S = 9041;
+    GetGuildsInfoS2C GetGuildsInfoS2C = 9042;
+    ReportGuildC2S ReportGuildC2S = 9043;
+    ReportGuildS2C ReportGuildS2C = 9044;
+    UpdatePlayerGuildSettingsC2S UpdatePlayerGuildSettingsC2S = 9045;
+    UpdatePlayerGuildSettingsS2C UpdatePlayerGuildSettingsS2C = 9046;
+    GetRecommendGuildsC2S GetRecommendGuildsC2S = 9047;
+    GetRecommendGuildsS2C GetRecommendGuildsS2C = 9048;
+    UpdateGuildChatMsgC2S UpdateGuildChatMsgC2S = 9049;
+    UpdateGuildChatMsgS2C UpdateGuildChatMsgS2C = 9050;
+    TestRpcEchoC2S TestRpcEchoC2S = 50000;
+    TestRpcEchoS2C TestRpcEchoS2C = 50001;
+  }
+}
+
+message SyncPlayerGuildS2C {
+  model.PlayerGuildInfo playerGuild = 1;
+}
+
+message SyncPlayerJoinGuildS2C {
+  model.PlayerGuildInfo playerGuild = 1;
+  string guildName = 2;
+}
+
+message GuildChatMsgS2C {
+  model.GuildChatMsg msg = 1;
+}
+
+message SyncGuildS2C {
+  repeated sfixed32 tagIds = 1;
+  string exAnnouncement = 2;
+  sfixed64 lastExternalEditTime = 3;
+  sfixed64 lastExternalEditorId = 4;
+  sfixed32 externalEditCount = 5;
+  string inAnnouncement = 6;
+  sfixed64 lastInternalEditTime = 7;
+  sfixed64 lastInternalEditorId = 8;
+  sfixed32 internalEditCount = 9;
+  sfixed64 muteEndTime = 10;
+}
+
+message SyncGuildMemberS2C {
+  message MembersEntry {
+    sfixed64 key = 1;
+    model.GuildMember value = 2;
+  }
+  message InfosEntry {
+    sfixed64 key = 1;
+    FriendShowPlayerInfo value = 2;
+  }
+  repeated MembersEntry members = 1;
+  repeated InfosEntry infos = 2;
+}
+
+message SyncGuildMemberExitS2C {
+  repeated sfixed64 playerIds = 1;
+}
+
+message SyncGuildApplicationS2C {
+  model.GuildApplication application = 1;
+  repeated sfixed64 removeIds = 2;
+}
+
+message CreateGuildC2S {
+  string name = 1;
+  repeated sfixed32 tagIds = 2;
+  string exAnnouncement = 3;
+}
+
+message CreateGuildS2C {
+  model.Guild guild = 1;
+  model.PlayerGuildInfo playerGuild = 2;
+}
+
+message SearchGuildC2S {
+  sfixed64 id = 1;
+  string name = 2;
+  repeated sfixed32 tagIds = 3;
+  sfixed32 page = 4;
+}
+
+message SearchGuildS2C {
+  bool isEnd = 1;
+  repeated model.Guild guilds = 2;
+}
+
+message ApplyToGuildC2S {
+  sfixed64 guildId = 1;
+  sfixed32 playerLevel = 2;
+  sfixed32 playerHeadIcon = 3;
+  sfixed32 playerBackground = 4;
+}
+
+message ApplyToGuildS2C {
+  model.PlayerGuildInfo playerGuild = 1;
+}
+
+message ProcessGuildApplicationC2S {
+  enum Action {
+    Accept = 0;
+    Reject = 1;
+  }
+  repeated sfixed64 playerIds = 1;
+  Action action = 2;
+  string playerName = 3;
+}
+
+message ProcessGuildApplicationS2C {
+  repeated sfixed64 playerIds = 1;
+}
+
+message SendGuildInvitationC2S {
+  sfixed64 playerId = 1;
+}
+
+message SendGuildInvitationS2C {
+  model.PlayerGuildInfo playerGuild = 1;
+}
+
+message ProcessGuildInvitationC2S {
+  enum Action {
+    Accept = 0;
+    Reject = 1;
+  }
+  repeated sfixed64 guildIds = 1;
+  Action action = 2;
+}
+
+message ProcessGuildInvitationS2C {
+  model.Guild guild = 1;
+  model.PlayerGuildInfo playerGuild = 2;
+}
+
+message GetGuildInfoC2S {
+}
+
+message GetGuildInfoS2C {
+  model.Guild guild = 1;
+}
+
+message UpdateGuildSettingsC2S {
+  repeated sfixed32 tagIds = 1;
+  string exAnnouncement = 2;
+}
+
+message UpdateGuildSettingsS2C {
+}
+
+message UpdateGuildInAnnouncementC2S {
+  string inAnnouncement = 1;
+}
+
+message UpdateGuildInAnnouncementS2C {
+}
+
+message TransferGuildMasterC2S {
+  sfixed64 targetPlayerId = 1;
+}
+
+message TransferGuildMasterS2C {
+}
+
+message ChangeGuildMemberTitleC2S {
+  sfixed64 targetPlayerId = 1;
+  sfixed32 role = 2;
+}
+
+message ChangeGuildMemberTitleS2C {
+}
+
+message KickGuildMemberC2S {
+  sfixed64 targetPlayerId = 1;
+}
+
+message KickGuildMemberS2C {
+}
+
+message ImpeachGuildMasterC2S {
+}
+
+message ImpeachGuildMasterS2C {
+}
+
+message ExitGuildC2S {
+}
+
+message ExitGuildS2C {
+  model.PlayerGuildInfo playerGuild = 1;
+}
+
+message DisbandGuildC2S {
+}
+
+message DisbandGuildS2C {
+  model.PlayerGuildInfo playerGuild = 1;
+}
+
+message GuildMissionRewardC2S {
+  sfixed32 taskId = 1;
+}
+
+message GuildMissionRewardS2C {
+  sfixed32 taskId = 1;
+}
+
+message GetGuildMemberChangeMsgC2S {
+  sfixed32 msgId = 1;
+}
+
+message GetGuildMemberChangeMsgS2C {
+  repeated model.GuildMemberChangeMsg messages = 1;
+}
+
+message SendGuildChatMsgC2S {
+  string msg = 1;
+}
+
+message SendGuildChatMsgS2C {
+  sfixed64 muteEndTime = 1;
+}
+
+message GetGuildChatMsgC2S {
+  sfixed32 msgId = 1;
+}
+
+message GetGuildChatMsgS2C {
+  repeated model.GuildChatMsg messages = 1;
+}
+
+message GuildMemberC2S {
+}
+
+message GuildMemberS2C {
+  repeated FriendShowPlayerInfo infos = 1;
+}
+
+message GetGuildsInfoC2S {
+  repeated sfixed64 guildIds = 1;
+}
+
+message GetGuildsInfoS2C {
+  message GuildsEntry {
+    sfixed64 key = 1;
+    model.Guild value = 2;
+  }
+  repeated GuildsEntry guilds = 2;
+}
+
+message ReportGuildC2S {
+  sfixed64 guildId = 1;
+  sfixed64 playerId = 2;
+  int32 reason = 3;
+  string detail = 4;
+  repeated string chatRecords = 5;
+}
+
+message ReportGuildS2C {
+}
+
+message UpdatePlayerGuildSettingsC2S {
+  bool inviteDisabled = 1;
+  bool notifyDisabled = 2;
+}
+
+message UpdatePlayerGuildSettingsS2C {
+  bool inviteDisabled = 1;
+  bool notifyDisabled = 2;
+}
+
+message GetRecommendGuildsC2S {
+}
+
+message GetRecommendGuildsS2C {
+  repeated model.Guild guilds = 1;
+}
+
+message UpdateGuildChatMsgC2S {
+  sfixed64 msgId = 1;
+  string msg = 2;
+}
+
+message UpdateGuildChatMsgS2C {
+}

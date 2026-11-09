@@ -1,0 +1,2059 @@
+syntax = "proto3";
+package model;
+
+enum StoryState {
+  None = 0;
+  GameBeginState = 1;
+  BeforeVoteState = 2;
+  VoteFinishState = 3;
+  GameEndState = 4;
+  MissionCompleteState = 5;
+}
+
+enum MatchMode {
+  match_mode_none = 0;
+  standard = 1;
+  ultra = 3;
+  pve = 4;
+  asymmetrical_battle = 7;
+  lucky_star_battle = 11;
+  mutator_pve = 12;
+}
+
+enum Attribute {
+  Gold = 0;
+  HP = 1;
+  ATK = 2;
+  DEF = 3;
+  Buffs = 4;
+  Place = 5;
+  Lottery = 6;
+  Cards = 7;
+  Bombs = 8;
+  Lv = 9;
+  Count = 10;
+  HpAdd = 19;
+  CombatCardNum = 20;
+  EffectCardNum = 21;
+  Killer = 23;
+  LotteryNum = 24;
+  NotBuyLottery = 25;
+  MovePoint = 26;
+  BuffId = 27;
+  LandType = 28;
+  ExecLimit = 29;
+  Distance = 30;
+  Owner = 31;
+  MustDie = 32;
+  Damage = 33;
+  SummonId = 34;
+  NodeId = 35;
+  Trigger = 36;
+  CardNum = 37;
+  GoldRate = 38;
+  Harm = 39;
+  MoveEnd = 40;
+  UseCardId = 41;
+  ImmuneBattle = 42;
+  ImmuneTrap = 43;
+  Defender = 44;
+  AtkDropGold = 45;
+  DefDropGold = 46;
+  DieDropGold = 47;
+  CostDamage = 48;
+  AbandonCard = 49;
+  AbandonFight = 50;
+  UseCardNum = 51;
+  ChangeHp = 52;
+  Point = 53;
+  Interrupt = 54;
+  AddCardNum = 55;
+  CanNotBattle = 56;
+  CanNotFightBack = 57;
+  Attacker = 58;
+  CardSubNum = 59;
+  DicePoint = 60;
+  TargetId = 61;
+  OldHp = 62;
+  BaseHarmRate = 63;
+  GiveCardNum = 64;
+  IsNoActive = 65;
+  BattlePoint = 66;
+  BattleDodge = 67;
+  IsRemoveBuff = 68;
+  IsNotUseSkill = 69;
+  MonsterNoMove = 70;
+  HasWrapAction = 71;
+  AddBattleCost = 72;
+  Invincible = 73;
+  IgnoreDefense = 74;
+  MoveEffect = 75;
+  CandyVIPDiscount = 76;
+  BattleFightBack = 77;
+  NotAddProgress = 78;
+  KillDropGold = 79;
+  KillerHeroId = 80;
+  AddModifyNum = 81;
+  AssistPlayerHeroId = 82;
+  BlueSpirit = 83;
+  RedSpirit = 84;
+  BreakThroughCardHarm = 85;
+  UseBreakThroughCard = 86;
+  TriggerEventId = 87;
+  PKParryDamage = 88;
+  LaughMonsterImmuneBattle = 89;
+  TriggerEventPct = 90;
+  TriggerEventCount = 91;
+  RestRangeDamage = 92;
+  MoveDicePoint = 93;
+  LaunchBattle = 94;
+  PveLockHp = 95;
+  PveLocDecHp = 96;
+  TermFightBackImme = 97;
+  IsFightBackBattle = 98;
+  SuicideId = 99;
+  AtkFromDefender = 100;
+  MosesSkill = 101;
+  GetCardFromDup = 102;
+  DamageType = 103;
+  IsRevive = 104;
+  DamageModifier = 105;
+  ShopCardDiscount = 106;
+  MustBattle = 107;
+  AddBattleMaxCost = 108;
+  LevelRollGold = 10001;
+  LevelBotRelic = 10002;
+  LevelBotAskBattle = 10003;
+  LevelNotUseBattleCard = 10004;
+  LevelBattleCardAtk = 10005;
+  LevelBotFront = 10006;
+}
+
+enum SongCompleteState {
+  NoneComplete = 0;
+  Complete = 1;
+  AllCombo = 2;
+  AllPerfect = 3;
+}
+
+enum BuffFrom {
+  none = 0;
+  self = 1;
+  land = 2;
+  room = 3;
+}
+
+enum TargetClassify {
+  Normal = 0;
+  SubGold = 1;
+  AddGold = 2;
+  SubHp = 3;
+  AddHp = 4;
+}
+
+message Player {
+  message GachaCountEntry {
+    sfixed32 key = 1;
+    GachaCount value = 2;
+  }
+  message RoleCardEntry {
+    sfixed32 key = 1;
+    RoleCard value = 2;
+  }
+  message RechargeEntry {
+    string key = 1;
+    RechargeInfo value = 2;
+  }
+  message MailsEntry {
+    sfixed32 key = 1;
+    MailData value = 2;
+  }
+  message Day7Entry {
+    sfixed32 key = 1;
+    Day7Reward value = 2;
+  }
+  message CanPraiseMapEntry {
+    sfixed64 key = 1;
+    sfixed32 value = 2;
+  }
+  message ScratchCardEntry {
+    sfixed32 key = 1;
+    ScratchCardRecord value = 2;
+  }
+  message MsgInfosEntry {
+    sfixed64 key = 1;
+    FriendChatMsgInfo value = 2;
+  }
+  message WeeklyLimitsEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message CampaignPassEntry {
+    sfixed32 key = 1;
+    bool value = 2;
+  }
+  message SignInRewardEntry {
+    sfixed32 key = 1;
+    SignInReward value = 2;
+  }
+  message LightGiftEntry {
+    sfixed32 key = 1;
+    LightGift value = 2;
+  }
+  message PayStarDiscEntry {
+    string key = 1;
+    sfixed32 value = 2;
+  }
+  message CampScoreEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message MapModeCountEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message WinMapEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message ActivityPassEntry {
+    sfixed32 key = 1;
+    ActivityPass value = 2;
+  }
+  message MapModeWinCountEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message AltArtCardsEntry {
+    sfixed32 key = 1;
+    AltArtCardInfo value = 2;
+  }
+  message FlipCardEntry {
+    sfixed32 key = 1;
+    FlipCardActivity value = 2;
+  }
+  message QuestionInfoEntry {
+    sfixed32 key = 1;
+    QuestionModel value = 2;
+  }
+  sfixed64 id = 1;
+  string nick = 2;
+  bool wait_off_line = 3;
+  bool off_line = 4;
+  sfixed64 room_id = 5;
+  sfixed32 slot = 6;
+  sfixed32 changeSlot = 7;
+  sfixed32 progress = 8;
+  string token = 9;
+  Hero hero = 10;
+  repeated ItemEtc bag_items = 11;
+  PlayerShopInfo shop_info = 12;
+  sfixed64 nextOverDayTime = 13;
+  repeated FashionPlan fashionPlan = 14;
+  sfixed32 usePlan = 15;
+  repeated GachaCountEntry gachaCount = 16;
+  sfixed64 nextOverMonthTime = 17;
+  sfixed64 nextOverWeekTime = 18;
+  repeated RoleCardEntry roleCard = 19;
+  bool isBot = 20;
+  TaskInfo task = 21;
+  bool isUpPlayer = 22;
+  sint64 saveTime = 23;
+  bool roomReady = 24;
+  sfixed32 level = 25;
+  sfixed32 exp = 26;
+  repeated RechargeEntry recharge = 27;
+  sint64 createTime = 28;
+  repeated sfixed32 cdkGift = 29;
+  repeated MailsEntry mails = 30;
+  sfixed32 mailGenId = 31;
+  sfixed64 lastServerAllMail = 32;
+  repeated ActivityInfo activityTask = 34;
+  bool isDayPlayGame = 35;
+  bool isDayLogin = 36;
+  ShowPlayerInfo showPlayer = 37;
+  repeated GachaRecordList gachaRecords = 38;
+  repeated Day7Entry day7 = 39;
+  repeated CanPraiseMapEntry canPraiseMap = 40;
+  sfixed32 MonthlyCardRemDays = 41;
+  ClientData clientData = 42;
+  FriendList friends = 43;
+  sfixed64 offlineTime = 44;
+  repeated FriendInvite roomInvite = 45;
+  bool loginCheck = 46;
+  sfixed64 loginTime = 47;
+  repeated ScratchCardEntry scratchCard = 48;
+  sfixed64 watchRoomId = 49;
+  BattlePass battlePass = 50;
+  repeated MsgInfosEntry msgInfos = 51;
+  bool isDayPlayPVE = 52;
+  repeated WeeklyLimitsEntry Weekly_limits = 53;
+  sfixed32 matchingMode = 54;
+  sfixed64 punishmentTime = 55;
+  repeated CampaignPassEntry CampaignPass = 56;
+  repeated SignInRewardEntry signInReward = 57;
+  PayAmountInfo PayAmountInfo = 58;
+  string serverId = 59;
+  bool isDelete = 60;
+  repeated LightGiftEntry lightGift = 61;
+  InviteInfo inviteInfo = 62;
+  sfixed32 channelType = 63;
+  repeated PayStarDiscEntry payStarDisc = 64;
+  sfixed32 rechargeSum = 65;
+  sfixed32 winCount = 66;
+  sfixed64 nextChangeNameTime = 67;
+  MissionMod missionMod = 68;
+  string deviceId = 69;
+  repeated CampScoreEntry campScore = 70;
+  sfixed32 unLockDifficulty = 71;
+  repeated TaskDSO activityTasks = 72;
+  repeated ItemEtc RecoupBagItems = 73;
+  bool isDayPlayPVP = 74;
+  sfixed32 dailyPraiseCount = 75;
+  repeated MapModeCountEntry mapModeCount = 79;
+  repeated WinMapEntry winMap = 80;
+  sfixed64 matchTeamId = 81;
+  string SteamId = 82;
+  sfixed32 mergeFlag = 83;
+  string plat = 84;
+  SingleInfo SingleInfo = 85;
+  repeated ActivityPassEntry activityPass = 86;
+  sfixed64 friendsCdTime = 88;
+  sfixed64 nearFriendsCdTime = 89;
+  sfixed64 friendBlackCdTime = 90;
+  sfixed64 friendInviteCdTime = 91;
+  sfixed32 lastLaborDicePoint = 93;
+  repeated MapModeWinCountEntry mapModeWinCount = 94;
+  sfixed32 onlineStatus = 95;
+  bool isDayPlayLuckyStar = 96;
+  bool isHarmony = 97;
+  repeated AltArtCardsEntry altArtCards = 98;
+  CreditInfo creditInfo = 99;
+  SportsMeetInfo sportsMeetInfo = 100;
+  ReturnInfo returnInfo = 101;
+  sfixed64 updateTime = 102;
+  sfixed64 muteTime = 103;
+  repeated FlipCardEntry flipCard = 104;
+  sfixed32 harmonyType = 105;
+  repeated QuestionInfoEntry QuestionInfo = 106;
+  sfixed64 tagSet = 107;
+  PlayerTagInfo tagInfo = 108;
+  PlayerGuildInfo guildInfo = 201;
+  sfixed32 game_server_id = 1001;
+  sfixed32 room_server_id = 1002;
+}
+
+message PlayerTagInfo {
+  bool hasFirstForceQuit = 1;
+  bool isLastPveLose = 2;
+}
+
+message QuestionModel {
+  enum QuestionState {
+    None = 0;
+    Claim = 1;
+    Close = 2;
+  }
+  sfixed64 createTime = 1;
+  QuestionState state = 2;
+}
+
+message ReturnInfo {
+  sfixed64 triggerTime = 1;
+  sfixed64 endTime = 2;
+  bool freeGiftClaimed = 3;
+  sfixed32 surveyState = 4;
+  ReturnSignIn signIn = 5;
+  sfixed32 triggerCount = 6;
+}
+
+message ReturnSignIn {
+  sfixed32 unlockDay = 1;
+  sfixed64 lastUnlockTime = 2;
+  repeated sfixed32 freeClaimedDays = 3;
+  repeated sfixed32 advClaimedDays = 4;
+  bool advUnlocked = 5;
+}
+
+message ActivityPass {
+  sfixed32 defId = 1;
+  sfixed32 gear = 2;
+}
+
+message SportsMeetInfo {
+  message ChallengeDataEntry {
+    sfixed32 key = 1;
+    ChallengeData value = 2;
+  }
+  repeated ChallengeDataEntry challengeData = 1;
+  repeated sfixed32 passMapIds = 2;
+  bool isKnockoutMatch = 3;
+  bool isFinalMatch = 4;
+}
+
+message ChallengeData {
+  message GameDataEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message KillDataEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  repeated GameDataEntry gameData = 1;
+  repeated KillDataEntry killData = 2;
+  GameStats GameStats = 3;
+}
+
+message GameStats {
+  sfixed32 maxSingleDamage = 1;
+  sfixed32 maxTotalDamage = 2;
+  sfixed32 maxGetGold = 3;
+  sfixed32 treatmentScore = 4;
+  sfixed32 totalTransferGold = 5;
+  sfixed32 totalDamage = 6;
+  sfixed32 totalDie = 7;
+}
+
+message TaskDSO {
+  sfixed32 Id = 1;
+  sfixed32 Progress = 2;
+  sfixed32 Status = 3;
+}
+
+message SqlPlayerActivityTaskList {
+  repeated TaskDSO activityTasks = 1;
+}
+
+message SqlInviteInfo {
+  InviteInfo inviteInfo = 1;
+}
+
+message InviteInfo {
+  sfixed64 inviter = 1;
+  repeated sfixed32 taskFinishIds = 2;
+}
+
+message LightGift {
+  message LightGiftEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message RewardsEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  sfixed32 activityId = 1;
+  repeated LightGiftEntry lightGift = 2;
+  repeated RewardsEntry Rewards = 3;
+}
+
+message PayAmountInfo {
+  sfixed32 agePosition = 1;
+  sfixed32 amount = 2;
+  sfixed64 nextRemindTime = 3;
+}
+
+message LaborActDiceInfo {
+  repeated sfixed32 currDice = 1;
+  sfixed32 totalDicePoint = 2;
+  repeated ItemEtc item = 3;
+}
+
+message PveHeroStrengthen {
+  sfixed32 level = 1;
+  sfixed32 exp = 2;
+  repeated sfixed32 talent = 3;
+}
+
+message BattlePass {
+  message RewardIdsEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message TaskEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  sfixed32 defId = 1;
+  sfixed32 lv = 2;
+  sfixed32 exp = 3;
+  sfixed32 gear = 4;
+  repeated RewardIdsEntry rewardIds = 5;
+  repeated TaskEntry task = 10;
+  repeated sfixed32 taskRewardIs = 11;
+}
+
+message FriendInvite {
+  sfixed64 playerId = 1;
+  sfixed64 roomId = 2;
+  sfixed64 time = 3;
+  string roomPwd = 4;
+  sfixed32 roomServerId = 5;
+}
+
+message FriendList {
+  message FriendNotesEntry {
+    sfixed64 key = 1;
+    string value = 2;
+  }
+  repeated sfixed64 friendIds = 1;
+  repeated sfixed64 blacks = 2;
+  repeated FriendApply apply = 3;
+  repeated FriendSelfApply selfApply = 4;
+  sfixed32 dayApplyCount = 5;
+  repeated FriendNotesEntry friendNotes = 6;
+}
+
+message FriendSelfApply {
+  sfixed64 playerId = 1;
+  sfixed64 time = 3;
+}
+
+message FriendApply {
+  sfixed64 playerId = 1;
+  sfixed64 time = 3;
+  sfixed32 opType = 4;
+}
+
+message ClientData {
+  message GuideDataEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message DateChangeDataEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message SongDataEntry {
+    sfixed32 key = 1;
+    SongData value = 2;
+  }
+  message SettingDataEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  repeated GuideDataEntry guideData = 1;
+  repeated DateChangeDataEntry dateChangeData = 2;
+  repeated SongDataEntry songData = 3;
+  repeated SettingDataEntry settingData = 4;
+  repeated sfixed32 NewItemData = 5;
+  repeated sfixed32 campaignTutorialData = 6;
+  repeated sfixed32 starExpression = 7;
+  repeated sfixed32 topExpression = 8;
+}
+
+message Day7Reward {
+  sfixed32 goodsId = 1;
+  sfixed64 createTime = 2;
+  sfixed32 maxRewardDay = 3;
+  repeated sfixed32 rewardDay = 4;
+  bool todayReward = 5;
+}
+
+message SignInReward {
+  sfixed32 activityId = 1;
+  sfixed32 signInCount = 2;
+  sfixed64 updateTime = 3;
+}
+
+message GachaRecordList {
+  sfixed32 gachaId = 1;
+  sfixed32 poolId = 3;
+  repeated GachaRecord records = 2;
+  sfixed32 count = 4;
+  sfixed32 rewardCount = 5;
+}
+
+message ShowPlayerInfo {
+  sfixed32 standingPainting = 1;
+  repeated sfixed32 achieveId = 2;
+  bool isShowData = 3;
+  bool isShowFight = 4;
+  repeated PlayerFightRecord record = 5;
+  sfixed32 praiseNum = 6;
+  repeated PlayerFightRecord replayRecord = 7;
+}
+
+message PlayerFightRecord {
+  sfixed64 time = 1;
+  repeated PlayerFightData data = 2;
+  string replayId = 3;
+  string version = 4;
+}
+
+message PlayerFightData {
+  sfixed64 playerId = 1;
+  string name = 2;
+  sfixed32 lv = 3;
+  sfixed32 gold = 4;
+  sfixed32 heroId = 5;
+  sfixed32 slot = 6;
+  sfixed32 rank = 7;
+  sfixed32 mapType = 8;
+  bool isGiveUp = 9;
+  sfixed32 headIcon = 10;
+  sfixed32 background = 11;
+  sfixed32 playerLevel = 12;
+}
+
+message GachaRecord {
+  sfixed32 itemId = 1;
+  sfixed32 itemCount = 2;
+  bool isConvert = 3;
+  sfixed64 time = 4;
+}
+
+message MailData {
+  message RewardsEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  sfixed32 id = 1;
+  string title = 2;
+  string context = 3;
+  string sendName = 4;
+  bool isRead = 5;
+  bool isGetReward = 6;
+  sfixed64 createTime = 7;
+  repeated RewardsEntry rewards = 10;
+  sfixed64 expireTime = 11;
+  sfixed64 startTime = 12;
+  bool isStarMail = 13;
+}
+
+message RechargeInfo {
+  string appid = 1;
+  sfixed32 goodsId = 2;
+  sfixed32 goodsCount = 3;
+  sfixed32 itemId = 4;
+  sfixed32 num = 5;
+  sfixed32 typeDefId = 6;
+  string operationGoodsID = 7;
+  sfixed32 coupons = 8;
+  string plat = 9;
+  sfixed64 createTime = 10;
+  string deviceId = 11;
+}
+
+message SqlPlayerDataByte {
+  message GachaCountEntry {
+    sfixed32 key = 1;
+    GachaCount value = 2;
+  }
+  message RoleCardEntry {
+    sfixed32 key = 1;
+    RoleCard value = 2;
+  }
+  message WeeklyLimitsEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message CampaignPassEntry {
+    sfixed32 key = 1;
+    bool value = 2;
+  }
+  message LightGiftEntry {
+    sfixed32 key = 1;
+    LightGift value = 2;
+  }
+  message PayStarDiscEntry {
+    string key = 1;
+    sfixed32 value = 2;
+  }
+  message MapModeCountEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message WinMapEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message MapModeWinCountEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  repeated ItemEtc bag_items = 1;
+  repeated GachaCountEntry gachaCount = 2;
+  repeated FashionPlan fashionPlan = 3;
+  repeated RoleCardEntry roleCard = 4;
+  repeated WeeklyLimitsEntry Weekly_limits = 5;
+  bool isDayPlayPVE = 6;
+  repeated CampaignPassEntry CampaignPass = 7;
+  PayAmountInfo PayAmountInfo = 8;
+  repeated LightGiftEntry lightGift = 9;
+  repeated PayStarDiscEntry payStarDisc = 10;
+  sfixed32 winCount = 11;
+  sfixed32 unLockDifficulty = 12;
+  repeated ItemEtc recoupBagItems = 13;
+  bool isDayPlayPVP = 14;
+  sfixed32 dailyPraiseCount = 15;
+  repeated MapModeCountEntry mapModeCount = 16;
+  repeated WinMapEntry winMap = 17;
+  repeated MapModeWinCountEntry mapModeWinCount = 18;
+}
+
+message SqlPlayerDataByte1 {
+  message RechargeEntry {
+    string key = 1;
+    RechargeInfo value = 2;
+  }
+  message ActivityPassEntry {
+    sfixed32 key = 1;
+    ActivityPass value = 2;
+  }
+  message AltArtCardsEntry {
+    sfixed32 key = 1;
+    AltArtCardInfo value = 2;
+  }
+  message FlipCardEntry {
+    sfixed32 key = 1;
+    FlipCardActivity value = 2;
+  }
+  message QuestionInfoEntry {
+    sfixed32 key = 1;
+    QuestionModel value = 2;
+  }
+  repeated sfixed32 cdk = 1;
+  repeated MailData mail = 2;
+  repeated RechargeEntry recharge = 3;
+  SingleInfo singleInfo = 4;
+  repeated ActivityPassEntry activityPass = 5;
+  sfixed32 onlineStatus = 6;
+  repeated AltArtCardsEntry altArtCards = 7;
+  CreditInfo creditInfo = 8;
+  SportsMeetInfo SportsMeetInfo = 9;
+  sfixed64 muteTime = 10;
+  repeated FlipCardEntry flipCard = 11;
+  PlayerGuildInfo guildInfo = 12;
+  repeated QuestionInfoEntry QuestionInfo = 13;
+  PlayerTagInfo tagInfo = 14;
+}
+
+message CreditInfo {
+  sfixed32 deductScore = 1;
+  sfixed64 lastViolationTime = 2;
+  sfixed64 matchPunishmentTime = 3;
+  sfixed64 lastExemptedTime = 4;
+  sfixed32 lastExemptedActionType = 5;
+}
+
+message AltArtCardInfo {
+  sfixed32 cardId = 1;
+  sfixed32 cardFaceId = 2;
+}
+
+message SingleInfo {
+  message LevelPassIdsEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message StageLevelIdEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  repeated LevelPassIdsEntry levelPassIds = 1;
+  sfixed32 maxScore = 2;
+  repeated StageLevelIdEntry stageLevelId = 3;
+}
+
+message SqlPlayerGachaRecords {
+  repeated GachaRecordList records = 1;
+}
+
+message SqlPlayerActivityTask {
+  message Day7Entry {
+    sfixed32 key = 1;
+    Day7Reward value = 2;
+  }
+  message SignInRewardEntry {
+    sfixed32 key = 1;
+    SignInReward value = 2;
+  }
+  repeated ActivityInfo task = 1;
+  repeated Day7Entry day7 = 2;
+  repeated SignInRewardEntry signInReward = 3;
+  ReturnInfo returnInfo = 4;
+}
+
+message SqlScratchCard {
+  message InfoEntry {
+    sfixed32 key = 1;
+    ScratchCardRecord value = 2;
+  }
+  repeated InfoEntry info = 1;
+}
+
+message ScratchCardRecord {
+  message PoolEntry {
+    sfixed32 key = 1;
+    ScratchCardPool value = 2;
+  }
+  repeated PoolEntry pool = 1;
+  sfixed32 currentPoolId = 2;
+}
+
+message ScratchCardPool {
+  message RecordEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  repeated RecordEntry record = 1;
+}
+
+message FlipCardActivity {
+  message RecordsEntry {
+    sfixed32 key = 1;
+    bool value = 2;
+  }
+  message ProgressRewardEntry {
+    sfixed32 key = 1;
+    bool value = 2;
+  }
+  repeated RecordsEntry records = 1;
+  repeated ProgressRewardEntry progressReward = 2;
+}
+
+message TaskInfo {
+  message WeekConditionEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message ConditionEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message Condition1Entry {
+    sfixed32 key = 1;
+    ConditionData value = 2;
+  }
+  sfixed32 progressReward = 1;
+  bool isTeaching = 2;
+  repeated WeekConditionEntry weekCondition = 6;
+  repeated ConditionEntry condition = 7;
+  repeated sfixed32 taskRewardIs = 8;
+  repeated sfixed32 achieveRewardIs = 9;
+  repeated sfixed32 weekTaskRewardIs = 10;
+  repeated Condition1Entry condition1 = 11;
+}
+
+message ConditionData {
+  sfixed32 condType = 1;
+  repeated ConditionParams params = 2;
+}
+
+message ConditionParams {
+  sfixed32 param = 1;
+  sfixed32 param1 = 2;
+}
+
+message ActivityInfo {
+  message ConditionEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message Condition1Entry {
+    sfixed32 key = 1;
+    ConditionData value = 2;
+  }
+  sfixed32 infoId = 1;
+  repeated ConditionEntry condition = 5;
+  repeated sfixed32 taskRewardIs = 6;
+  repeated Condition1Entry condition1 = 7;
+}
+
+message RoleCard {
+  sfixed32 defId = 1;
+  sfixed32 exp = 2;
+  sfixed32 lv = 3;
+  sfixed32 useAdorn = 4;
+  bool isBreakThrough = 5;
+  sfixed32 fightCount = 6;
+  PveHeroStrengthen pve_strengthen = 7;
+  bool Collected = 8;
+}
+
+message GachaCount {
+  sfixed32 guarantee = 1;
+  sfixed32 role = 2;
+  sfixed32 roleUp = 3;
+  sfixed32 count = 4;
+  sfixed32 poolId = 5;
+}
+
+message FashionPlan {
+  message FashionEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  sfixed32 plan = 1;
+  repeated FashionEntry fashion = 2;
+}
+
+message PlayerShopInfo {
+  message ShopRandomItemEntry {
+    sfixed32 key = 1;
+    ShopRandomItem value = 2;
+  }
+  message RecordEntry {
+    sfixed32 key = 1;
+    ShopBuyRecord value = 2;
+  }
+  message RechargeRecordEntry {
+    sfixed32 key = 1;
+    ShopBuyRecord value = 2;
+  }
+  message FirstBuyEntry {
+    sfixed32 key = 1;
+    RechargeBuyFirst value = 2;
+  }
+  message ShopRookieGiftEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  repeated ShopRandomItemEntry shop_random_item = 1;
+  repeated RecordEntry record = 2;
+  repeated RechargeRecordEntry rechargeRecord = 3;
+  repeated FirstBuyEntry firstBuy = 4;
+  sfixed64 lastResetTime = 5;
+  sfixed64 lastTransferTime = 6;
+  repeated ShopRookieGiftEntry shop_rookie_gift = 7;
+  sfixed64 rechargeGoodsValue = 8;
+}
+
+message RechargeBuyFirst {
+  repeated sfixed32 goods_id = 1;
+}
+
+message ShopRandomItem {
+  repeated sfixed32 goods_id = 1;
+}
+
+message ShopBuyRecord {
+  message RecordsEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  repeated RecordsEntry records = 1;
+}
+
+message HeroBar {
+  message GameDataEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  sfixed64 player_id = 1;
+  sfixed32 hero_id = 2;
+  bool affirm = 3;
+  sfixed32 useAdorn = 4;
+  sfixed32 pveLevel = 5;
+  bool isTrial = 6;
+  sfixed32 skinPendant = 7;
+  bool affirmedSkin = 8;
+  sfixed32 pveTalentId = 9;
+  repeated GameDataEntry gameData = 10;
+}
+
+message HeroBarBox {
+  message BoxEntry {
+    sfixed64 key = 1;
+    HeroBar value = 2;
+  }
+  repeated BoxEntry box = 1;
+}
+
+message HeroPlace {
+  sfixed32 node_id = 1;
+  repeated sfixed32 front_node_ids = 2;
+  sfixed32 back_node_id = 3;
+}
+
+message OnceOnOff {
+  bool val = 1;
+}
+
+message CardInfo {
+  sfixed32 uniqueId = 1;
+  sfixed32 cardId = 2;
+  sfixed32 purifyNum = 3;
+  bool isTemp = 4;
+  sfixed32 battleCost = 5;
+}
+
+message Hero {
+  enum MonsterType {
+    NONE = 0;
+    Thief = 1;
+    BOSS = 2;
+    PVE_BOSS = 10;
+    PVE_MONSTER = 11;
+    PVE_ELITE_MONSTER = 12;
+    PVE_ALLY_MONSTER = 30;
+  }
+  enum OfflineType {
+    OfflineType_None = 0;
+    OfflineType_WithoutReconnect = 1;
+    OfflineType_WithReconnect = 2;
+    OfflineType_OverThreeMinute = 3;
+  }
+  message BuffsEntry {
+    sfixed64 key = 1;
+    Buff value = 2;
+  }
+  message LotterysEntry {
+    sfixed32 key = 1;
+    bool value = 2;
+  }
+  message AdditionAttrsEntry {
+    sfixed64 key = 1;
+    AdditionAttribute value = 2;
+  }
+  message EventIdsEntry {
+    sfixed32 key = 1;
+    bool value = 2;
+  }
+  message SkillCdsEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message SelectRelicsEntry {
+    sfixed32 key = 1;
+    bool value = 2;
+  }
+  message DoneActionsEntry {
+    sfixed64 key = 1;
+    bool value = 2;
+  }
+  sfixed64 player_id = 1;
+  sfixed32 hero_id = 2;
+  sfixed32 node_id = 3;
+  repeated BuffsEntry buffs = 4;
+  sfixed32 round = 5;
+  sfixed32 be_born_node_id = 6;
+  sfixed32 gold = 7;
+  repeated CardInfo cards = 8;
+  sfixed32 move_point = 10;
+  repeated sfixed32 front_node_ids = 11;
+  sfixed32 back_node_id = 12;
+  sfixed32 use_time = 13;
+  sfixed32 hp = 14;
+  sfixed32 defense = 15;
+  sfixed32 attack = 16;
+  sfixed64 battle_id = 17;
+  repeated LotterysEntry Lotterys = 18;
+  repeated sfixed64 ask_player_ids = 19;
+  sfixed32 append_move_point1 = 20;
+  sfixed32 append_move_point2 = 21;
+  repeated Bomb bombs = 22;
+  sfixed32 maxHp = 23;
+  bool IsDoubleThrowDice = 24;
+  bool IsStopRound = 25;
+  sfixed32 RealMove = 26;
+  bool IsBigShop = 27;
+  sfixed32 bigShopEffectCardNum = 28;
+  sfixed32 bigShopCombatCardNum = 29;
+  sfixed32 userCardNum = 30;
+  bool is_control_move_point = 31;
+  repeated AdditionAttrsEntry addition_attrs = 32;
+  sfixed32 lv = 33;
+  bool force_dir = 34;
+  bool landNoHandle = 35;
+  sfixed32 eventTriggerNum = 36;
+  repeated EventIdsEntry event_ids = 37;
+  repeated SkillCdsEntry skill_cds = 38;
+  sfixed32 useSkillNum = 39;
+  bool affirm = 40;
+  sfixed32 dev_next_event_id = 41;
+  sfixed32 dev_next_destiny_id = 42;
+  sfixed32 dev_next_divination_id = 43;
+  sfixed64 bossTargetId = 44;
+  sfixed64 lastChatTime = 45;
+  sfixed32 standingPainting = 46;
+  ConditionalInfo cond = 47;
+  bool isLaunchFight = 48;
+  MonsterType monsterType = 49;
+  sfixed32 actionWeight = 50;
+  repeated SelectRelicsEntry select_relics = 52;
+  sfixed32 monster_index = 53;
+  sfixed32 DoubleThrowDiceSkill = 54;
+  PveHeroStrengthen pve_hero_strengthen = 55;
+  sfixed32 battle_count = 56;
+  sfixed32 re_roll_num = 57;
+  sfixed32 dev_move_point = 58;
+  sfixed32 dev_attack_point = 59;
+  sfixed32 dev_defense_point = 60;
+  sfixed32 teamId = 61;
+  sfixed32 specialScore = 62;
+  sfixed32 reviveRoundNum = 63;
+  sfixed32 cureNum = 64;
+  sfixed32 salaryNum = 65;
+  sfixed32 markNum = 66;
+  bool isTrial = 67;
+  sfixed32 buyRelicNum = 68;
+  sfixed32 useCardMaxNum = 69;
+  sfixed32 skinPendant = 70;
+  sfixed32 cardDistance = 71;
+  bool canCounter = 72;
+  sfixed32 counterNum = 73;
+  sfixed32 modityNum = 74;
+  bool notSelect = 75;
+  sfixed32 moveEffectSkillId = 76;
+  sfixed32 timeOutNum = 77;
+  sfixed32 cardDiscount = 78;
+  sfixed32 disCardPrice = 79;
+  sfixed32 cardIdx = 80;
+  sfixed32 diceWeightIndex = 81;
+  bool LandBuffHandle = 82;
+  bool hasSendChat = 84;
+  bool hasSendPhrase = 85;
+  sfixed64 offlineTime = 86;
+  OfflineType offlineType = 87;
+  sfixed32 uniqueNum = 88;
+  sfixed32 cardAtk = 89;
+  sfixed32 energyNum = 90;
+  bool isSkipRound = 91;
+  sfixed32 crimeNum = 92;
+  sfixed32 roundEffectCardNum = 93;
+  sfixed32 roundEffectGold = 94;
+  repeated DoneActionsEntry done_actions = 1000;
+  bool actionEnd = 1001;
+  bool onlyUseCard = 1002;
+}
+
+message ConditionalInfo {
+  message KillMonstersEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message UseCandyCountEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message TeammateKillMonsterEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message ActionOverTimeEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message TeammateStarCoinEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message KillPlayersEntry {
+    sfixed64 key = 1;
+    sfixed32 value = 2;
+  }
+  sfixed32 kill_count = 1;
+  sfixed32 total_damage = 2;
+  sfixed32 pk_damage_max = 3;
+  sfixed32 total_die = 4;
+  sfixed32 total_injured = 5;
+  sfixed32 total_trap = 6;
+  sfixed32 use_trap = 7;
+  sfixed32 use_roadblock = 8;
+  sfixed32 thunder = 9;
+  sfixed32 hospital = 10;
+  sfixed32 lottery = 11;
+  sfixed32 kill_pvp_monster = 12;
+  sfixed32 gold = 13;
+  sfixed32 kill_thief = 14;
+  sfixed32 sakura_count = 15;
+  sfixed32 train_count = 16;
+  sfixed32 hospital_sakura_count = 17;
+  sfixed32 goldRelicNum = 18;
+  sfixed32 sinkAllOpponents = 19;
+  sfixed32 transferGold = 20;
+  sfixed32 initGoldCount = 21;
+  sfixed32 TraitorCardCount = 22;
+  sfixed32 kill_pve_monster = 23;
+  sfixed32 treatmentScore = 24;
+  sfixed32 movePoint = 25;
+  sfixed32 battleDiceSixCount = 26;
+  bool finalKillBoss = 27;
+  sfixed32 selfDie = 28;
+  repeated KillMonstersEntry killMonsters = 29;
+  sfixed32 dragonBallSynthesis = 30;
+  sfixed32 snakeBossMission = 31;
+  sfixed32 fishBossMission = 32;
+  repeated UseCandyCountEntry useCandyCount = 33;
+  repeated TeammateKillMonsterEntry teammateKillMonster = 34;
+  sfixed32 useCard = 35;
+  sfixed32 useSkill = 36;
+  repeated ActionOverTimeEntry actionOverTime = 37;
+  repeated TeammateStarCoinEntry teammateStarCoin = 38;
+  repeated KillPlayersEntry killPlayers = 39;
+  sfixed32 plantCount = 40;
+}
+
+message PlayerVoteInfo {
+  sfixed32 selectId = 1;
+  bool affirm = 2;
+  sfixed32 point = 3;
+  sfixed64 playerId = 4;
+}
+
+message QuickCardRecord {
+  sfixed64 player_id = 1;
+  sfixed64 prev_target_id = 2;
+  sfixed32 prev_card_id = 3;
+  sfixed64 target_id = 4;
+  sfixed32 card_id = 5;
+  bool card_exist = 6;
+  sfixed64 prev_player_id = 7;
+}
+
+message QuickCardStack {
+  message OriginalTargetIdsEntry {
+    sfixed64 key = 1;
+    bool value = 2;
+  }
+  sfixed64 original_player_id = 1;
+  repeated OriginalTargetIdsEntry original_target_ids = 2;
+  sfixed32 original_card_id = 3;
+  repeated QuickCardRecord history = 4;
+}
+
+message AdditionAttribute {
+  enum AttrType {
+    none = 0;
+    atk = 1;
+    def = 2;
+    max_hp = 3;
+    move = 4;
+    cd = 5;
+    card_num = 6;
+    gold = 7;
+    reroll_num = 8;
+  }
+  sfixed32 attack = 1;
+  sfixed32 defense = 2;
+  sfixed32 harm = 3;
+  sfixed32 move_point = 4;
+  sfixed32 next_move_point = 5;
+  sfixed64 unique_id = 6;
+  sfixed32 count1 = 7;
+  sfixed32 abandon_card_count = 9;
+  AttrMarkInfo mark = 10;
+  sfixed32 maxHp = 11;
+  sfixed32 skillCd = 12;
+  sfixed32 useCardNum = 13;
+  sfixed64 extra_param = 14;
+  sfixed32 cardDistance = 15;
+  sfixed32 can_counter = 16;
+  bool no_move = 17;
+  bool isLaugh = 18;
+  sfixed64 extraParam1 = 19;
+  sfixed32 cardAtk = 20;
+  sfixed32 addBattleMaxCost = 21;
+  sfixed32 skillAppendMovePoint2 = 101;
+}
+
+message AttrMarkInfo {
+  enum MarkType {
+    XS = 0;
+    BH = 1;
+    DC = 2;
+    HT = 3;
+  }
+  MarkType type = 1;
+  sfixed32 mark1 = 2;
+  sfixed64 markByHeroId = 3;
+}
+
+message AccountInfo {
+  fixed64 accountId = 1;
+  string nick = 2;
+  sfixed64 playerId = 3;
+  string token = 4;
+  string plat = 5;
+  string deviceId = 6;
+  string steamId = 7;
+}
+
+message TriggerPhrase {
+  enum Type {
+    none = 0;
+    transfer_gold = 1;
+    give_card = 2;
+    cure_friend = 3;
+    kill_boss = 4;
+  }
+  sfixed64 activePlayerId = 1;
+  sfixed64 passivePlayerId = 2;
+  Type trigger_type = 3;
+}
+
+message MapMissionTarget {
+  enum Type {
+    none = 0;
+    kill_monster = 1;
+    collect_summon = 2;
+    become_dragon = 3;
+    rising_star = 4;
+    boss_hp_changed = 5;
+    buff_progress = 6;
+    build_building = 7;
+  }
+  Type target_type = 1;
+  repeated sfixed32 target_id = 2;
+  sfixed32 target_num = 3;
+}
+
+message MapMission {
+  enum State {
+    none = 0;
+    accept = 1;
+    complete = 2;
+    remove = 3;
+    failed = 4;
+  }
+  sfixed32 mission_id = 1;
+  repeated MapMissionTarget targets = 2;
+  State mission_state = 3;
+  sfixed64 extra_param = 4;
+  sfixed64 last_progress_player_id = 5;
+}
+
+message MatchTeamInfo {
+  enum State {
+    none = 0;
+    waiting = 1;
+    matching = 2;
+    playing = 3;
+  }
+  message PlayerReadyEntry {
+    sfixed64 key = 1;
+    bool value = 2;
+  }
+  sfixed64 id = 1;
+  MatchMode mode = 2;
+  State state = 3;
+  sfixed32 map_id = 4;
+  sfixed32 difficulty = 5;
+  sfixed64 leader_id = 6;
+  repeated Player players = 7;
+  sfixed64 match_time = 8;
+  repeated PlayerReadyEntry player_ready = 9;
+}
+
+message Room {
+  enum State {
+    none = 0;
+    wait = 1;
+    choice_hero = 10;
+    choice_skin = 15;
+    ready1 = 20;
+    running = 25;
+    finish = 30;
+  }
+  message LandsEntry {
+    sfixed32 key = 1;
+    BaseLand value = 2;
+  }
+  message BuffsEntry {
+    sfixed64 key = 1;
+    Buff value = 2;
+  }
+  message LandBuffsEntry {
+    sfixed32 key = 1;
+    BuffArray value = 2;
+  }
+  message MapDelayParamEntry {
+    sfixed32 key = 1;
+    MapDelayParam value = 2;
+  }
+  message MonsterIndexEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message MapStatusEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message StoryFinishEntry {
+    sfixed32 key = 1;
+    bool value = 2;
+  }
+  message DelayProgressMapEventEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message SummonBuffIndexEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message GameLuckyStarEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message RoomTermMonsterPoolEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message LuckyStarMissionInfoEntry {
+    sfixed32 key = 1;
+    LuckyStarMissionInfo value = 2;
+  }
+  message HeroPendingTermsEntry {
+    sfixed64 key = 1;
+    PendingTermIds value = 2;
+  }
+  message LandTypeOverrideEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message BuildingsEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message BuildBuffIndexEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  sfixed64 id = 1;
+  string name = 2;
+  string pwd = 3;
+  sfixed32 max_time = 4;
+  sfixed32 map_id = 5;
+  sfixed32 map_data_id = 15;
+  sfixed64 master_id = 6;
+  sfixed64 create_time = 7;
+  sfixed64 update_time = 8;
+  repeated Player players = 9;
+  repeated Player monsters = 10;
+  State state = 11;
+  repeated LandsEntry lands = 12;
+  repeated Action Predicts = 13;
+  sfixed32 round = 14;
+  repeated sfixed32 combat_cards = 16;
+  repeated sfixed32 effect_cards = 17;
+  sfixed64 LastAccessTime = 18;
+  sfixed32 player_idx = 19;
+  repeated BuffsEntry buffs = 20;
+  Battle battle = 21;
+  ActionGroup action_group = 22;
+  bool land_no_handle = 23;
+  sfixed32 lottery_award = 24;
+  repeated LandBuffsEntry land_buffs = 25;
+  QuickCardStack card_stack = 26;
+  Gamble hall = 28;
+  HeroBarBox box = 29;
+  sfixed64 start_time = 30;
+  sfixed32 upgrade_plan = 31;
+  sfixed32 time_plan = 32;
+  sfixed32 boss_target_gold = 35;
+  sfixed32 mapType = 36;
+  fixed64 steamLobbyId = 37;
+  repeated sfixed32 mapEventIds = 38;
+  sfixed64 waitTime = 39;
+  sfixed32 speedType = 40;
+  repeated MapDelayParamEntry mapDelayParam = 41;
+  string watchCode = 42;
+  repeated Player watchPlayers = 43;
+  sfixed32 trainCount = 44;
+  sfixed64 actionTimeOut = 45;
+  sfixed32 gameProgress = 46;
+  sfixed32 gameMaxProgress = 47;
+  sfixed32 difficulty = 48;
+  bool pveBossActive = 49;
+  repeated MapMission mapMissions = 50;
+  sfixed32 monsterAtkAdd = 51;
+  sfixed32 monsterDefAdd = 52;
+  repeated MonsterIndexEntry monsterIndex = 55;
+  sfixed32 player_total_die = 56;
+  bool isMatchRoom = 57;
+  sfixed32 level_id = 58;
+  VictoryCondition VictoryCondition = 59;
+  sfixed32 specialScore = 60;
+  repeated MapStatusEntry mapStatus = 61;
+  sfixed32 mapIndex = 62;
+  sfixed32 mapDifficultyId = 63;
+  repeated sfixed32 waitExecEventIds = 64;
+  repeated PlayerVoteInfo voteInfo = 65;
+  bool skipStory = 66;
+  sfixed32 campId = 67;
+  repeated StoryFinishEntry storyFinish = 68;
+  StoryState storyState = 69;
+  bool resetWeight = 70;
+  sfixed32 roomLabel = 71;
+  repeated sfixed64 match_team_ids = 72;
+  repeated DelayProgressMapEventEntry delayProgressMapEvent = 73;
+  repeated ChangeSlotApplyList changeSlotApplyList = 74;
+  repeated SummonBuffIndexEntry summonBuffIndex = 75;
+  repeated sfixed32 voteIds = 76;
+  repeated GameLuckyStarEntry gameLuckyStar = 77;
+  repeated sfixed32 room_terms = 78;
+  repeated sfixed32 room_term_event = 79;
+  repeated sfixed32 room_term_convert_nodes = 80;
+  repeated RoomTermMonsterPoolEntry room_term_monster_pool = 81;
+  repeated LuckyStarMissionInfoEntry luckyStarMissionInfo = 82;
+  sfixed64 choiceStartTime = 83;
+  repeated sfixed32 round_dispatched_terms = 84;
+  repeated HeroPendingTermsEntry hero_pending_terms = 86;
+  bool gmSetTerm = 87;
+  repeated Clue mapClue = 88;
+  sfixed32 clue_num = 89;
+  repeated LandTypeOverrideEntry land_type_override = 90;
+  repeated sfixed32 building_guids = 91;
+  repeated BuildingsEntry buildings = 92;
+  repeated BuildBuffIndexEntry buildBuffIndex = 93;
+  sfixed32 room_server_id = 1001;
+}
+
+message Clue {
+  enum State {
+    none = 0;
+    accept = 1;
+    complete = 2;
+  }
+  sfixed32 clue_id = 1;
+  repeated MapMissionTarget targets = 2;
+  State state = 3;
+}
+
+message ExpressionIds {
+  repeated sfixed32 expressionId = 1;
+}
+
+message PendingTermIds {
+  repeated sfixed32 termIds = 1;
+}
+
+message LuckyStarMissionInfo {
+  message LuckyStarMissionEntry {
+    sfixed64 key = 1;
+    LuckyStarMission value = 2;
+  }
+  repeated LuckyStarMissionEntry luckyStarMission = 1;
+}
+
+message LuckyStarMission {
+  enum State {
+    none = 0;
+    accept = 1;
+    complete = 2;
+    fail = 3;
+  }
+  sfixed32 defId = 1;
+  repeated sfixed32 targets = 2;
+  State luckyStarMissionState = 3;
+}
+
+message ChangeSlotApplyList {
+  enum ApplyStatus {
+    ApplyStatus_Process = 0;
+    ApplyStatus_Cancel = 1;
+    ApplyStatus_Agree = 2;
+    ApplyStatus_Reject = 3;
+  }
+  sfixed64 applyId = 1;
+  sfixed64 targetId = 2;
+  ApplyStatus applyStatus = 3;
+}
+
+message VictoryCondition {
+  message KillRecordEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  sfixed32 victory_type = 1;
+  repeated sfixed32 victory_params = 2;
+  repeated KillRecordEntry kill_record = 3;
+  sfixed32 star = 4;
+}
+
+message MapDelayParam {
+  repeated sfixed32 params = 1;
+  sfixed32 param = 2;
+}
+
+message BuffArray {
+  message BuffsEntry {
+    sfixed64 key = 1;
+    Buff value = 2;
+  }
+  repeated BuffsEntry buffs = 1;
+}
+
+message ActionInfo {
+  sfixed64 sn = 1;
+  sfixed32 use_time = 2;
+}
+
+message SongData {
+  sfixed32 easyTopScore = 1;
+  SongCompleteState easyCompleteState = 2;
+  sfixed32 hardTopScore = 3;
+  SongCompleteState hardCompleteState = 4;
+}
+
+message Bomb {
+  sfixed64 onwer_player_id = 1;
+  sfixed64 player_id = 2;
+  bool is_open = 3;
+  sfixed32 card_id = 4;
+}
+
+message Action {
+  sfixed32 id = 1;
+  sfixed64 player_id = 2;
+  bytes data = 3;
+  sfixed64 sn = 4;
+  bool notBro = 5;
+}
+
+message ActionGroup {
+  message AffirmIdsEntry {
+    sfixed64 key = 1;
+    bool value = 2;
+  }
+  sfixed32 action_id = 1;
+  sfixed32 affirm_num = 2;
+  repeated AffirmIdsEntry affirm_ids = 3;
+}
+
+message buff_source {
+  enum source {
+    unknown = 0;
+    skill = 1;
+    card = 2;
+    event = 3;
+    summon = 4;
+    destiny = 5;
+    relic = 6;
+    mission = 7;
+    gameMode = 8;
+    luckyStar = 9;
+    terms = 10;
+    level = 11;
+    build = 12;
+  }
+  source s = 1;
+  sfixed32 id = 2;
+}
+
+message Buff {
+  message ParamsEntry {
+    sfixed32 key = 1;
+    sfixed64 value = 2;
+  }
+  message RestoreParamsEntry {
+    sfixed32 key = 1;
+    sfixed64 value = 2;
+  }
+  message RelativeBuffUidsEntry {
+    sfixed32 key = 1;
+    sfixed64 value = 2;
+  }
+  sfixed64 unique_id = 1;
+  sfixed32 buff_id = 2;
+  repeated ParamsEntry params = 3;
+  repeated RestoreParamsEntry restore_params = 4;
+  sfixed32 keepRound = 5;
+  sfixed32 delayRound = 6;
+  sfixed32 useTime = 7;
+  repeated sfixed64 targetIds = 8;
+  sfixed32 priority = 9;
+  sfixed32 node_id = 10;
+  sfixed32 progress = 11;
+  string relation_id = 12;
+  bool is_sakura = 13;
+  sfixed32 buffIndex = 14;
+  bool canRangeDamage = 15;
+  repeated RelativeBuffUidsEntry relativeBuffUids = 18;
+  repeated buff_source chain = 49;
+  buff_source source = 50;
+  string key = 51;
+}
+
+message BuffInterrupt {
+  sfixed64 buff_sn = 1;
+  sfixed64 next_buff_sn = 2;
+  BuffFrom f = 3;
+  sfixed32 triggerType = 4;
+}
+
+message LandStatusInfo {
+  bool Active = 1;
+  sfixed32 LandType = 2;
+}
+
+message BaseLand {
+  sfixed32 node_id = 1;
+  sfixed32 landType = 2;
+  bool is_cloud_point = 3;
+  bool is_remote = 4;
+}
+
+message Battle {
+  message CardUseStateEntry {
+    sfixed64 key = 1;
+    bool value = 2;
+  }
+  sfixed64 battle_id = 1;
+  BattleRole attacker = 2;
+  BattleRole defender = 3;
+  repeated CardUseStateEntry card_use_state = 4;
+  bool is_end = 5;
+  bool if_no_win_must_die = 6;
+  bool is_pursuit = 7;
+  bool fightBack = 8;
+  sfixed64 skill_player_id = 9;
+}
+
+message BattleRole {
+  sfixed64 player_id = 1;
+  sfixed32 atk = 2;
+  sfixed32 def = 3;
+  repeated sfixed32 use_cards = 5;
+  sfixed32 point = 6;
+  bool dodge = 7;
+  sfixed32 inc_hp = 8;
+  sfixed32 cost = 9;
+  sfixed32 drop_gold = 10;
+  sfixed32 max_cost = 11;
+  bool can_not_fight_back = 12;
+  sfixed32 hero_id = 13;
+  sfixed32 attack_bonus = 14;
+  sfixed64 chain_attacker = 15;
+  sfixed32 chain_attack_damage = 16;
+  sfixed32 max_atk = 17;
+  sfixed32 max_def = 18;
+  sfixed32 min_atk = 19;
+  sfixed32 min_def = 20;
+  sfixed32 init_atk = 21;
+  sfixed32 init_def = 22;
+  repeated cardCombat cardCombatBonus = 23;
+}
+
+message cardCombat {
+  sfixed32 cardId = 1;
+  sfixed32 cardBonus = 2;
+}
+
+message Gamble {
+  enum state {
+    guess = 0;
+    throw = 1;
+    result = 2;
+  }
+  sfixed32 baseGold = 1;
+  sfixed32 betGold = 2;
+  repeated GambleRole roles = 3;
+  state s = 4;
+  bool is_odd = 5;
+}
+
+message GambleRole {
+  sfixed64 player_id = 1;
+  sfixed32 hero_id = 2;
+  bool is_die = 3;
+  bool gold_lack = 4;
+  sfixed32 bet_gold = 5;
+  sfixed32 guess_code = 6;
+  sfixed32 point = 7;
+  sfixed32 goldChange = 8;
+}
+
+message TargetPlayers {
+  repeated sfixed64 player_ids = 1;
+}
+
+message ItemEtc {
+  sfixed32 item_id = 1;
+  sfixed32 count = 2;
+}
+
+message FriendChatMsgInfo {
+  sfixed64 readTime = 2;
+  sfixed64 lastTime = 3;
+}
+
+message ChatMessage {
+  sfixed64 senderId = 1;
+  sfixed64 receiverId = 2;
+  string message = 3;
+  sfixed64 time = 4;
+}
+
+message DefaultHeroInfo {
+  message GameDataEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  sfixed32 hero_id = 1;
+  sfixed32 useAdorn = 2;
+  sfixed32 pveLevel = 3;
+  sfixed32 skinPendant = 4;
+  sfixed32 pveTalentId = 5;
+  repeated GameDataEntry gameData = 6;
+}
+
+message CampaignHeroInfoMap {
+  message HeroInfoMapEntry {
+    sfixed32 key = 1;
+    DefaultHeroInfo value = 2;
+  }
+  repeated HeroInfoMapEntry heroInfoMap = 1;
+}
+
+message SimplePlayerInfo {
+  sfixed64 player_id = 1;
+  string name = 2;
+  sfixed64 offline_time = 3;
+  int32 head_icon = 4;
+  int32 lv = 5;
+  int32 background = 6;
+  sfixed32 signalScore = 7;
+  sfixed64 updateTime = 8;
+  sfixed32 onlineStatus = 9;
+  sfixed64 guildId = 10;
+}
+
+message SimpleRoomInfo {
+  sfixed64 roomId = 1;
+  sfixed32 roomServerId = 2;
+  bool isBusy = 3;
+  sfixed32 roomStatus = 4;
+}
+
+message MissionMod {
+  repeated TaskDSO activityTasks = 1;
+  LaborActDiceInfo laborActDiceInfo = 2;
+}
+
+message SingleGameData {
+  message StageLevelIdEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  sfixed32 levelId = 1;
+  sfixed32 round = 2;
+  sfixed32 gameProgress = 3;
+  SingleHero hero = 5;
+  SingleCardData cardData = 6;
+  SingleBuildingData buildingData = 7;
+  sfixed32 clientGenerateUID = 10;
+  sfixed32 gameStatus = 11;
+  SingleMapData mapData = 12;
+  sfixed32 roundTiming = 13;
+  repeated sfixed32 selectCardIds = 14;
+  sfixed32 stageId = 15;
+  repeated StageLevelIdEntry stageLevelId = 16;
+}
+
+message SingleHero {
+  message BuildingStarCoinEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message RelicStarCoinEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  sfixed32 heroId = 1;
+  sfixed32 gold = 2;
+  sfixed32 developLandCount = 3;
+  sfixed32 forceFirstDicePoint = 4;
+  sfixed32 doubleDiceTime = 5;
+  sfixed32 CardCostReductionBonus = 6;
+  sfixed32 CardRevenueBonus = 7;
+  repeated sfixed32 relic = 8;
+  sfixed32 standLandId = 9;
+  repeated sfixed32 nextLandIds = 10;
+  sfixed32 totalGold = 11;
+  repeated sfixed32 relicCurrPoint = 12;
+  repeated BuildingStarCoinEntry buildingStarCoin = 13;
+  repeated RelicStarCoinEntry relicStarCoin = 14;
+}
+
+message SingleCardData {
+  message CardDepotEntry {
+    sfixed32 key = 1;
+    SingleCard value = 2;
+  }
+  repeated sfixed32 bagCardUIDs = 1;
+  repeated sfixed32 shopCardUIDs = 2;
+  repeated CardDepotEntry cardDepot = 3;
+  sfixed32 shopRefreshCount = 4;
+}
+
+message SingleCard {
+  sfixed32 cardUID = 1;
+  sfixed32 configId = 2;
+  sfixed32 level = 3;
+  sfixed32 exp = 4;
+}
+
+message SingleBuildingData {
+  repeated SingleBuilding buildings = 1;
+  sfixed32 buildingUpgradeCount = 2;
+}
+
+message SingleBuilding {
+  message OperateBonusEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  message AttributeBonusEntry {
+    sfixed32 key = 1;
+    sfixed32 value = 2;
+  }
+  sfixed32 buildingId = 1;
+  sfixed32 cardUID = 2;
+  sfixed32 buildingFoundationId = 3;
+  repeated OperateBonusEntry operateBonus = 4;
+  repeated AttributeBonusEntry attributeBonus = 5;
+  sfixed32 throwDiceTriggerCount = 6;
+  sfixed32 passTriggerCount = 7;
+  sfixed32 stayTriggerCount = 8;
+}
+
+message SingleMapData {
+  sfixed32 CurrentMissionProgress = 1;
+  repeated sfixed32 finishMissionIndex = 2;
+  repeated sfixed32 Wastefoundation = 3;
+}
+
+message PlayerGuildInfo {
+  message ApplicationsEntry {
+    sfixed64 key = 1;
+    sfixed64 value = 2;
+  }
+  message InvitationsEntry {
+    sfixed64 key = 1;
+    sfixed64 value = 2;
+  }
+  message ReceivedInvitationsEntry {
+    sfixed64 key = 1;
+    GuildInvitation value = 2;
+  }
+  message GuildTasksEntry {
+    sfixed32 key = 1;
+    TaskDSO value = 2;
+  }
+  message WeeklySignEntry {
+    sfixed64 key = 1;
+    bool value = 2;
+  }
+  sfixed64 guildId = 1;
+  sfixed64 lastJoinTime = 2;
+  sfixed32 applyCount = 3;
+  repeated ApplicationsEntry applications = 4;
+  repeated InvitationsEntry invitations = 5;
+  sfixed64 lastSearchTime = 6;
+  bool inviteDisabled = 7;
+  repeated ReceivedInvitationsEntry receivedInvitations = 8;
+  repeated GuildTasksEntry guildTasks = 9;
+  repeated WeeklySignEntry weeklySign = 10;
+  bool createBanned = 11;
+  sfixed64 muteEndTime = 12;
+  sfixed64 lastChatTime = 13;
+  bool notifyDisabled = 14;
+  bool exitGuildNotify = 15;
+}
+
+message GuildInvitation {
+  sfixed64 guildId = 1;
+  sfixed64 inviterId = 2;
+  sfixed64 invitationTime = 3;
+}
+
+message Guild {
+  message MembersEntry {
+    sfixed64 key = 1;
+    GuildMember value = 2;
+  }
+  message ApplicationsEntry {
+    sfixed64 key = 1;
+    GuildApplication value = 2;
+  }
+  sfixed64 id = 1;
+  string name = 2;
+  repeated sfixed32 tagIds = 3;
+  sfixed32 status = 4;
+  sfixed32 memberCount = 5;
+  sfixed64 CreateTime = 6;
+  sfixed64 UpdateTime = 7;
+  sfixed32 lastWeekActiveCount = 8;
+  sfixed64 muteEndTime = 9;
+  repeated MembersEntry members = 101;
+  string exAnnouncement = 102;
+  sfixed64 lastExternalEditTime = 103;
+  sfixed64 lastExternalEditorId = 104;
+  sfixed32 externalEditCount = 105;
+  string inAnnouncement = 106;
+  sfixed64 lastInternalEditTime = 107;
+  sfixed64 lastInternalEditorId = 108;
+  sfixed32 internalEditCount = 109;
+  repeated ApplicationsEntry applications = 110;
+  sfixed64 lastChatTime = 111;
+  sfixed64 nextDayTime = 201;
+  sfixed64 nextWeekTime = 202;
+  sfixed64 lastChangeMsgId = 203;
+  sfixed64 lastChatMsgId = 204;
+  bool isUpdate = 1001;
+  sfixed64 saveTime = 1002;
+}
+
+message SqlGuildDataByte {
+  message MembersEntry {
+    sfixed64 key = 1;
+    GuildMember value = 2;
+  }
+  message ApplicationsEntry {
+    sfixed64 key = 1;
+    GuildApplication value = 2;
+  }
+  repeated MembersEntry members = 1;
+  string exAnnouncement = 2;
+  sfixed64 lastExternalEditTime = 3;
+  sfixed64 lastExternalEditorId = 4;
+  sfixed32 externalEditCount = 5;
+  string inAnnouncement = 6;
+  sfixed64 lastInternalEditTime = 7;
+  sfixed64 lastInternalEditorId = 8;
+  sfixed32 internalEditCount = 9;
+  repeated ApplicationsEntry applications = 10;
+  sfixed64 lastChatTime = 11;
+  sfixed64 nextDayTime = 101;
+  sfixed64 nextWeekTime = 102;
+  sfixed64 lastChangeMsgId = 103;
+  sfixed64 lastChatMsgId = 104;
+}
+
+message GuildMember {
+  sfixed64 playerId = 1;
+  sfixed32 role = 2;
+  sfixed32 weeklyActivity = 3;
+  sfixed32 lastWeeklyActivity = 4;
+  sfixed64 lastLoginTime = 5;
+  bool weeklySign = 6;
+  string playerName = 7;
+  bool Online = 8;
+}
+
+message GuildApplication {
+  sfixed64 playerId = 1;
+  sfixed64 applyTime = 2;
+  string playerNick = 3;
+  sfixed32 playerLevel = 4;
+  sfixed32 playerHeadIcon = 5;
+  sfixed32 playerBackground = 6;
+}
+
+message GuildMemberChangeMsg {
+  sfixed64 id = 1;
+  sfixed32 changeType = 2;
+  repeated string param = 3;
+  sfixed64 time = 4;
+}
+
+message GuildChatMsg {
+  sfixed64 id = 1;
+  sfixed64 senderId = 2;
+  string msg = 3;
+  sfixed64 time = 4;
+}
